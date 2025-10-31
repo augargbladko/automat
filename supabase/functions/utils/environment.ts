@@ -21,9 +21,3 @@ export const supabaseServiceRoleKey =
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || ""
 
 export const denoServe = Deno.serve
-
-export const twitterAppKey = Deno.env.get("TWITTER_CONSUMER_KEY") || ""
-export const twitterAppSecret = Deno.env.get("TWITTER_CONSUMER_SECRET") || ""
-export const twitterAccessToken = Deno.env.get("TWITTER_ACCESS_TOKEN") || ""
-export const twitterAccessSecret =
-  Deno.env.get("TWITTER_ACCESS_TOKEN_SECRET") || ""
