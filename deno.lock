@@ -1,7 +1,7 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@supabase/supabase-js@^2.58.0": "2.58.0",
+    "jsr:@supabase/supabase-js@2.58.0": "2.58.0",
     "npm:@eslint/js@^9.1.1": "9.38.0",
     "npm:@nextui-org/react@^2.2.10": "2.6.11_framer-motion@11.18.2__react@18.2.0__react-dom@18.2.0___react@18.2.0_react@18.2.0_react-dom@18.2.0__react@18.2.0_@nextui-org+system@2.4.6__framer-motion@11.18.2___react@18.2.0___react-dom@18.2.0____react@18.2.0__react@18.2.0__react-dom@18.2.0___react@18.2.0__@nextui-org+theme@2.4.5___tailwindcss@3.4.18____postcss@8.5.6____jiti@1.21.7__tailwindcss@3.4.18___postcss@8.5.6___jiti@1.21.7_@nextui-org+theme@2.4.5__tailwindcss@3.4.18___postcss@8.5.6___jiti@1.21.7_tailwindcss@3.4.18__postcss@8.5.6__jiti@1.21.7",
     "npm:@supabase/auth-helpers-nextjs@0.9": "0.9.0_@supabase+supabase-js@2.77.0",
@@ -17,6 +17,7 @@
     "npm:@types/react-dom@18.2.18": "18.2.18",
     "npm:@types/react@18.2.48": "18.2.48",
     "npm:autoprefixer@10.4.17": "10.4.17_postcss@8.4.33",
+    "npm:big-integer@1.6.52": "1.6.52",
     "npm:clsx@^2.1.0": "2.1.1",
     "npm:encoding@~0.1.13": "0.1.13",
     "npm:eslint-config-airbnb-typescript@18": "18.0.0_@typescript-eslint+eslint-plugin@7.18.0__@typescript-eslint+parser@7.18.0___eslint@8.57.1___typescript@5.3.3__eslint@8.57.1__typescript@5.3.3_@typescript-eslint+parser@7.18.0__eslint@8.57.1__typescript@5.3.3_eslint@8.57.1_typescript@5.3.3",
@@ -5974,7 +5975,9 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@supabase/supabase-js@^2.58.0"
+      "jsr:@supabase/supabase-js@2.58.0",
+      "npm:big-integer@1.6.52",
+      "npm:telegram@2.26.22"
     ],
     "packageJson": {
       "dependencies": [
