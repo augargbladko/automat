@@ -4,4 +4,5 @@
 /supabase/functions/github-action-deploy
 /supabase/functions/update-account-tracking
 /supabase/functions/update-launch-owner-tracking
+/supabase/functions/queries
 /supabase/migrations
