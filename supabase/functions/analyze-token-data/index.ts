@@ -4,8 +4,7 @@
 
 import { SupabaseClient } from "supabase-jsr";
 import {
-  connectToSupabase,
-  storeTokenDataArray
+  connectToSupabase
 } from "../queries/database/index.ts";
 import { Tables } from "../types/index.ts";
 import { Token, TokenUpdate } from "../types/tables.ts";
@@ -61,7 +60,7 @@ async function skipLowHolder(supabase: SupabaseClient, oneMonthAgo: number) {
 
     console.log(`skipped ${data.length} tokens`)
 
-    await storeTokenDataArray(supabase, upsert)
+    // await storeTokenDataArray(supabase, upsert)
   }
 }
 
@@ -99,7 +98,7 @@ async function ignoreEmAll(supabase: SupabaseClient) {
 
     console.log("ignored", ignored, "of", data.length, "tokens")
 
-    await storeTokenDataArray(supabase, upsert)
+    //await storeTokenDataArray(supabase, upsert)
   }
 }
 
