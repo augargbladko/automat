@@ -1,0 +1,21 @@
+alter table public.tokens enable row level security;
+CREATE POLICY "tokens_read" ON public.tokens FOR SELECT USING (true);
+alter table public.accounts enable row level security;
+CREATE POLICY "accounts_read" ON public.accounts FOR SELECT USING (true);
+alter table public.swaps enable row level security;
+CREATE POLICY "swaps_read" ON public.swaps FOR SELECT USING (true);
+alter table public.token_day_data enable row level security;
+CREATE POLICY "token_day_data_read" ON public.token_day_data FOR SELECT USING (true);
+alter table public.spikes enable row level security;
+CREATE POLICY "spikes_read" ON public.spikes FOR SELECT USING (true);
+alter table public.spike_scores enable row level security;
+CREATE POLICY "spike_scores_read" ON public.spike_scores FOR SELECT USING (true);
+alter table public.signals enable row level security;
+CREATE POLICY "signals_read" ON public.signals FOR SELECT USING (true);
+alter table public.launch_owners enable row level security;
+CREATE POLICY "launch_owners_read" ON public.launch_owners FOR SELECT USING (true);
+alter table public.launch_holdings enable row level security;
+CREATE POLICY "launch_holdings_read" ON public.launch_holdings FOR SELECT USING (true);
+alter table public.pointers enable row level security;
+
+alter role service_role set statement_timeout = '20s';

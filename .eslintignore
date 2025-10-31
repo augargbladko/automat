@@ -1,0 +1,4 @@
+# Ignore supabase functions in eslint
+/supabase
+/supabase/functions/types/supabase.ts
+.vercelignore

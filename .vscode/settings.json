@@ -1,0 +1,16 @@
+{
+  "[typescript]": { "editor.defaultFormatter": "denoland.vscode-deno" },
+  "deno.cache": ".cache",
+  "deno.config": "./supabase/deno.json",
+  "deno.enable": true,
+  "deno.enablePaths": ["supabase/functions"],
+  "deno.lint": true,
+  "deno.unstable": true,
+  "files.associations": { "*.css": "tailwindcss" },
+  "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#003617",
+    "titleBar.activeBackground": "#014C20",
+    "titleBar.activeForeground": "#E8FFF2"
+  }
+}

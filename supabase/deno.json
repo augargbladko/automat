@@ -1,0 +1,15 @@
+{
+  "fmt": {
+    "include": ["./supabase/functions"],
+    "exclude": ["README.md", ".env"]
+  },
+  "lint": { "exclude": [".cache"] },
+  "imports": {
+    "big-integer": "npm:big-integer@1.6.52",
+    "telegram": "npm:telegram@2.26.22",
+    "telegram/<subpath>": "npm:telegram@2.26.22/<subpath>",
+    "telegram/<subpath>/": "npm:telegram@2.26.22/<subpath>/",
+    "supabase-jsr": "jsr:@supabase/supabase-js@2.58.0"
+  },
+  "nodeModulesDir": "auto"
+}
