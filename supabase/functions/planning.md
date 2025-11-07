@@ -20,6 +20,8 @@ Call GA via proxy
 
 Acquire Telegram channel users
 
+If I want web pages to use supabase, I need to create an api route for the server, so Deno will work.
+
 Mobile proxy: SOAX is $3.60/GB (pricy?) https://soax.com/proxies/mobile
 Can use this effectively for
 
@@ -65,3 +67,11 @@ Get the wallet connect here:
 import { SdkActionEvent , UserActionEvent } from "@tonconnect/ui";
 Events.WALLET_CONNECT_STARTED
 Events.WALLET_CONNECT_SUCCESS
+
+# Needed $NUGS: 10Tn (10M million) ($5M at $0.5 per 1M)
+
+Add 200k users with 50% confirmed is a total of ~0.6Tn $NUGS, or 6% of the total.
+-- (300kM from friend bonus, and 300kM from the 20M bonus, where we don't get an exact divisor by 5)
+-- Roughly 5% from referrals, which isn't a lot.
+Then we have 10k useful accts that we're going to pull from, with a range of 500M to 1.5Bn
+-- 10k \* 1Bn = 10Tn.

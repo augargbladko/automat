@@ -12,5 +12,11 @@
     "activityBar.background": "#003617",
     "titleBar.activeBackground": "#014C20",
     "titleBar.activeForeground": "#E8FFF2"
-  }
+  },
+  "git-autoconfig.configList": [
+    {
+      "user.email": "augargbladko@gmail.com",
+      "user.name": "augargbladko"
+    }
+  ]
 }
