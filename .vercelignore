@@ -1,8 +1,4 @@
-/supabase/functions/analyze-token-data
-/supabase/functions/analyze-token-launches
-/supabase/functions/bot-buy
 /supabase/functions/github-action-deploy
-/supabase/functions/update-account-tracking
-/supabase/functions/update-launch-owner-tracking
+/supabase/functions/ingest-telegram-users
 /supabase/functions/queries
 /supabase/migrations

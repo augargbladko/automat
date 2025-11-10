@@ -8,6 +8,7 @@ import {
   supabaseUrl,
 } from "../../utils/index.ts";
 
+
 export function secureConnectToSupabase(): SupabaseClient {
   const supabaseClient: SupabaseClient = createClient(
     supabaseUrl,
