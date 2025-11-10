@@ -3,7 +3,6 @@
 import { Link } from "@nextui-org/react"
 import clsx from "clsx"
 import { usePathname } from "next/navigation"
-import { accountName } from "./utils"
 
 enum MainPaths {
   Analysis = "analysis",
@@ -55,9 +54,7 @@ function HeaderLink({ path }: { path: MainPaths }) {
   const isSelected = path === currentPath
   const hasSubPath = isSelected && paths.length > 2
   const hasDetailsPath = isSelected && paths.length > 3
-  let subtitle = hasSubPath
-    ? `${accountName(paths[2])}${hasDetailsPath ? ": Details" : ""}`
-    : ""
+  let subtitle = hasSubPath ? `${hasDetailsPath ? ": Details" : ""}` : ""
 
   return (
     <div className="mx-4 mt-4 flex flex-col">

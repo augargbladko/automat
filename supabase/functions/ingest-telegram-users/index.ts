@@ -3,7 +3,8 @@
 // This enables autocomplete, go to definition, etc.
 
 import { secureConnectToSupabase } from "../queries/database/index.ts";
-import { Tables } from "../types/index.ts";
+import { recursiveGetParticipants } from "../queries/telegram/recursiveGetParticipants.ts";
+import { testClient } from "../queries/telegram/testClient.ts";
 import { denoServe, handleCORS } from "../utils/index.ts";
 
 // Setup type definitions for built-in Supabase Runtime APIs
@@ -11,22 +12,19 @@ import { denoServe, handleCORS } from "../utils/index.ts";
 
 denoServe(
   handleCORS(async (req: Request) => {
-    const { address, tracking } = await req.json()
+    const { channel } = await req.json()
 
-    if (address?.length === 42) {
+    if (channel) {
       const supabase = secureConnectToSupabase()
-      const data = await supabase
-        .from(Tables.launch_owners)
-        .update({ tracking: tracking })
-        .eq("address", address)
-        .select()
-      return new Response(JSON.stringify(data), {
+        const client = await testClient();
+      await recursiveGetParticipants(client, supabase, channel);
+      return new Response(JSON.stringify({ success: true }), {
         headers: { "Content-Type": "application/json" },
       })
     } else {
       return new Response(
         JSON.stringify({
-          error: `cannot updated launch owner tracking for ${address}`,
+          error: `cannot scrape participants for channel: ${channel}`,
         }),
         {
           headers: { "Content-Type": "application/json" },
@@ -41,9 +39,18 @@ denoServe(
   1. Run `supabase start` (see: https://supabase.com/docs/reference/cli/supabase-start)
   2. Make an HTTP request:
 
-  curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/update-launch-owner-tracking' \
+  curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/ingest-telegram-users' \
     --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
     --header 'Content-Type: application/json' \
-    --data '{"address":"0xa39501f7ce2c048228cde0ec50b4a71f79d54696", "tracking:"likely_account"}'
+    --data '{"channel":"bibleverses" }'
+
+*/
+
+/* To invoke from another Supabase Function:
+
+    const supabase = await connectToSupabase(req)
+    const response = await supabase.functions.invoke('ingest-telegram-users', {
+      body: { channel: 'bibleverses' },
+    })
 
 */

@@ -1,22 +1,4 @@
 
 export enum Tables {
-  spikes = "spikes",
-  pointers = "pointers",
-  signals = "signals",
-  spike_scores = "spike_scores",
-  token_day_data = "token_day_data",
-  tokens = "tokens",
-  accounts = "accounts",
-  swaps = "swaps",
-  bot_buys = "bot_buys",
-  bot_transactions = "bot_transactions",
-  launch_holdings = "launch_holdings",
-  launch_owners = "launch_owners",
-  launch_signals = "launch_signals",
-  launch_d5_signals = "launch_d5_signals",
-  launch_d25_signals = "launch_d25_signals",
-  leaking_alpha = "leaking_alpha",
-  first_trades = "first_trades",
-  first_trade_data = "first_trade_data",
-  hourly_data = "hourly_data",
+  telegram_users = "telegram_users",
 }

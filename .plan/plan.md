@@ -38,9 +38,8 @@ For each email address:
 
 Fund each of the 12,483 accounts for ~0.1TON (should be enough, but requires about $5k in TON). Doing it via a tree of TON accounts is a little risky.
 
-The best way is probably to fund 50 base accounts manually, and have each one branch out to 4
+The best way is probably to fund 50 base accounts manually, and have each one branch out to 5-9 others
 
--     new  on the next level: 50 - 200 - 800 - 3200 - 12800
 -     6 jumps: 50 > 300 > 1800 > 10800
 -     (this requires $5k in TON if we're funding at 0.1 TON)
 -     then reverse the branches back to consolidate the $

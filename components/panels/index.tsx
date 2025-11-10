@@ -1,5 +1,3 @@
-export * from "./TokenDetailsPanel"
-export * from "./TokenDetailsTooltip"
-export * from "./TokenRiskPanel"
-export * from "./TokenRiskTooltip"
 export * from "./elements"
+export * from "./ErrorPanel"
+export * from "./LoadingPanel"

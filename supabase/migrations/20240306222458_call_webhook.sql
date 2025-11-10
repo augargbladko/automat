@@ -1,6 +1,9 @@
+-- Allow us to call any webhook function with payload in a cron job
+
 CREATE OR REPLACE FUNCTION call_webhook(function_name text, payload text)
   RETURNS VOID
 	LANGUAGE plpgsql
+  set search_path = ''
 	AS $$
 DECLARE
 	url text;
@@ -10,7 +13,7 @@ DECLARE
 	headers jsonb;
   jsonPayload jsonb;
 	request_id bigint;
-	timeout_ms integer DEFAULT 1000;
+	timeout_ms integer DEFAULT 10000;
 BEGIN
 	--
 	--
