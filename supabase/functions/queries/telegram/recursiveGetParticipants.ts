@@ -8,7 +8,7 @@ import { supabaseStoreArray } from "../database/supabase.ts";
 
 
 export async function recursiveGetParticipants(client: TelegramClient, supabase: SupabaseClient, channel: string) {
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZАБДЕЄЖФГИІКЛМНОПРСТУВХЦЧШЩЫЮЯЗ";
+  const alphabet = "АБДЕЄЖФГИІКЛМНОПРСТУВХЦЧШЩЫЮЯЗABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
   const mcf = await client.invoke(
     new Api.channels.GetFullChannel({
