@@ -4,7 +4,7 @@ import {
   TelegramUser,
   tableConflictKeys
 } from "../../types/index.ts";
-import { supabaseStoreArray } from "./index.ts";
+import { supabaseStoreArray } from "./supabase.ts";
 
 
 export async function storeTelegramUsers(

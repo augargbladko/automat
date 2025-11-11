@@ -1,5 +1,5 @@
 
-import { secureConnectToSupabase } from "../database/index.ts";
+import { secureConnectToSupabase } from "../database/supabase.ts";
 import { recursiveGetParticipants } from "./recursiveGetParticipants.ts";
 import { testClient } from "./testClient.ts";
 
@@ -8,10 +8,10 @@ import { testClient } from "./testClient.ts";
 
 async function scrapeUsers() {
   const supabase = secureConnectToSupabase();
-  const session = await supabase.from('dave').select('*');
-  console.log("Connected to Supabase.", session);
+  /*const session = await supabase.from('dave').select('*');
+  console.log("Connected to Supabase.", session);*/
   const client = await testClient();
-  await recursiveGetParticipants(client, supabase, "https://t.me/somechannel");
+  await recursiveGetParticipants(client, supabase, "friendship_love_dating_main");
   // function implementation
   // const channel = getChannelToScrape(supabase);
 

@@ -1,34 +1,42 @@
 CREATE TABLE telegram_users (
-  telegramId VARCHAR(42) PRIMARY KEY,
-  bot boolean,
-  scam boolean,
-  fake boolean,
+  telegram_id VARCHAR(42) PRIMARY KEY,
   premium boolean,
-  id integer,
-  firstName text,
-  lastName text,
+  first_name text,
+  last_name text,
   username text,
   phone text,
-  langCode text,
-  photoUrl text, -- photo url needs to be parsed, from users[] => users.photo.
-  dateJoined integer, -- from participants[] => participant.date
+  lang_code text,
+  photo_url text, -- photo url needs to be parsed, from users[] => users.photo.
+  date_joined integer, -- from participants[] => participant.date
 
   -- below here, we're creating this data.
-  walletId integer,
-  walletAddress text,
+  wallet_id integer,
+  wallet_address text,
   email text,
-  confirmedEmail boolean,
-  tokens double precision -- we'll calculate points, level, spend, etc off this value
+  confirmed_email boolean,
+  tokens double precision, -- we'll calculate points, level, spend, etc off this value
+  ton_spend double precision,
+
+  -- tracking data
+  -- what are we using this user for
+  -- have we created it
+  -- what are its current stats
+  tool_flags integer, -- 1/2/4/8 for the 4 tools, small to large
+  treasure_flags integer -- 1/2/4/8 for the 4 treasures, small to large
 );
 
-CREATE INDEX ON telegram_users (dateJoined);
-CREATE INDEX ON telegram_users (walletAddress);
-CREATE INDEX ON telegram_users (dateJoined);
+CREATE INDEX ON telegram_users (date_joined);
+CREATE INDEX ON telegram_users (wallet_id);
+CREATE INDEX ON telegram_users (wallet_address);
 CREATE INDEX ON telegram_users (email);
-CREATE INDEX ON telegram_users (confirmedEmail);
+CREATE INDEX ON telegram_users (confirmed_email);
+CREATE INDEX ON telegram_users (tokens);
+CREATE INDEX ON telegram_users (ton_spend);
+CREATE INDEX ON telegram_users (tokens);
+CREATE INDEX ON telegram_users (tokens);
 
-alter table public.telegram_users enable row level security;
-CREATE POLICY "telegram_users_read" ON public.telegram_users FOR SELECT USING (true);
+-- alter table public.telegram_users enable row level security;
+-- CREATE POLICY "telegram_users_read" ON public.telegram_users FOR SELECT USING (true);
 
 
 /* ------ INSERT TRIGGER FUNCTIONALITY ---------

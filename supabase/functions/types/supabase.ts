@@ -36,64 +36,61 @@ export type Database = {
     Tables: {
       telegram_users: {
         Row: {
-          bot: boolean | null
-          confirmedemail: boolean | null
-          datejoined: number | null
+          confirmed_email: boolean | null
+          date_joined: number | null
           email: string | null
-          fake: boolean | null
-          firstname: string | null
-          id: number | null
-          langcode: string | null
-          lastname: string | null
+          first_name: string | null
+          lang_code: string | null
+          last_name: string | null
           phone: string | null
-          photourl: string | null
+          photo_url: string | null
           premium: boolean | null
-          scam: boolean | null
-          telegramid: string
+          telegram_id: string
           tokens: number | null
+          ton_spend: number | null
+          tool_flags: number | null
+          treasure_flags: number | null
           username: string | null
-          walletaddress: string | null
-          walletid: number | null
+          wallet_address: string | null
+          wallet_id: number | null
         }
         Insert: {
-          bot?: boolean | null
-          confirmedemail?: boolean | null
-          datejoined?: number | null
+          confirmed_email?: boolean | null
+          date_joined?: number | null
           email?: string | null
-          fake?: boolean | null
-          firstname?: string | null
-          id?: number | null
-          langcode?: string | null
-          lastname?: string | null
+          first_name?: string | null
+          lang_code?: string | null
+          last_name?: string | null
           phone?: string | null
-          photourl?: string | null
+          photo_url?: string | null
           premium?: boolean | null
-          scam?: boolean | null
-          telegramid: string
+          telegram_id: string
           tokens?: number | null
+          ton_spend?: number | null
+          tool_flags?: number | null
+          treasure_flags?: number | null
           username?: string | null
-          walletaddress?: string | null
-          walletid?: number | null
+          wallet_address?: string | null
+          wallet_id?: number | null
         }
         Update: {
-          bot?: boolean | null
-          confirmedemail?: boolean | null
-          datejoined?: number | null
+          confirmed_email?: boolean | null
+          date_joined?: number | null
           email?: string | null
-          fake?: boolean | null
-          firstname?: string | null
-          id?: number | null
-          langcode?: string | null
-          lastname?: string | null
+          first_name?: string | null
+          lang_code?: string | null
+          last_name?: string | null
           phone?: string | null
-          photourl?: string | null
+          photo_url?: string | null
           premium?: boolean | null
-          scam?: boolean | null
-          telegramid?: string
+          telegram_id?: string
           tokens?: number | null
+          ton_spend?: number | null
+          tool_flags?: number | null
+          treasure_flags?: number | null
           username?: string | null
-          walletaddress?: string | null
-          walletid?: number | null
+          wallet_address?: string | null
+          wallet_id?: number | null
         }
         Relationships: []
       }

@@ -2,7 +2,7 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-import { secureConnectToSupabase } from "../queries/database/index.ts";
+import { secureConnectToSupabase } from "../queries/database/supabase.ts";
 import { recursiveGetParticipants } from "../queries/telegram/recursiveGetParticipants.ts";
 import { testClient } from "../queries/telegram/testClient.ts";
 import { denoServe, handleCORS } from "../utils/index.ts";
