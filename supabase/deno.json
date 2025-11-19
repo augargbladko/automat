@@ -9,7 +9,8 @@
     "telegram": "npm:telegram@2.26.22",
     "telegram/<subpath>": "npm:telegram@2.26.22/<subpath>",
     "telegram/<subpath>/": "npm:telegram@2.26.22/<subpath>/",
-    "supabase-jsr": "jsr:@supabase/supabase-js@2.58.0"
+    "supabase-jsr": "jsr:@supabase/supabase-js@2.58.0",
+    "mongodb": "npm:mongodb@6.1.0"
   },
   "nodeModulesDir": "auto"
 }
