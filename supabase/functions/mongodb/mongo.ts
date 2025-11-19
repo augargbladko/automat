@@ -21,6 +21,13 @@ export async function MongoTest() {
   }]).toArray();
   const tonSpent = (result[0]?.total || 0) / 1e9;
   console.log("MongoDB Aggregation Result:", tonSpent);
+
+  // create users with the right schema
+
+
+  // Add users to klaviyo with the right settings
+
+
   Deno.exit();
 }
 

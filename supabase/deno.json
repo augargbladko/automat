@@ -5,7 +5,10 @@
   },
   "lint": { "exclude": [".cache"] },
   "imports": {
+    "@ton/crypto": "npm:@ton/crypto@^3.3.0",
+    "@ton/ton": "npm:@ton/ton@^16.0.0",
     "big-integer": "npm:big-integer@1.6.52",
+    "lodash": "npm:lodash@^4.17.21",
     "telegram": "npm:telegram@2.26.22",
     "telegram/<subpath>": "npm:telegram@2.26.22/<subpath>",
     "telegram/<subpath>/": "npm:telegram@2.26.22/<subpath>/",
