@@ -5,6 +5,8 @@
   },
   "lint": { "exclude": [".cache"] },
   "imports": {
+    "@ton-api/client": "npm:@ton-api/client@^0.4.0",
+    "@ton-api/ton-adapter": "npm:@ton-api/ton-adapter@^0.4.1",
     "@ton/crypto": "npm:@ton/crypto@^3.3.0",
     "@ton/ton": "npm:@ton/ton@^16.0.0",
     "big-integer": "npm:big-integer@1.6.52",

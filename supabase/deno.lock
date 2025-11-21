@@ -8,6 +8,8 @@
     "npm:@supabase/postgrest-js@1.21.4": "1.21.4",
     "npm:@supabase/realtime-js@2.15.5": "2.15.5",
     "npm:@supabase/storage-js@2.12.2": "2.12.2",
+    "npm:@ton-api/client@0.4": "0.4.0_@ton+core@0.62.0__@ton+crypto@3.3.0_@ton+crypto@3.3.0",
+    "npm:@ton-api/ton-adapter@~0.4.1": "0.4.1_@ton-api+client@0.4.0__@ton+core@0.62.0___@ton+crypto@3.3.0__@ton+crypto@3.3.0_@ton+core@0.62.0__@ton+crypto@3.3.0_@ton+crypto@3.3.0",
     "npm:@ton/crypto@^3.3.0": "3.3.0",
     "npm:@ton/ton@16": "16.0.0_@ton+core@0.62.0__@ton+crypto@3.3.0_@ton+crypto@3.3.0",
     "npm:big-integer@1.6.52": "1.6.52",
@@ -75,6 +77,20 @@
       "integrity": "sha512-SiySHxi3q7gia7NBYpsYRu8gyI0NhFwSORMxbZIxJ/zAVkN6QpwDRan158CJ+UdzD4WB/rQMAGRqIJQP+7ccAQ==",
       "dependencies": [
         "@supabase/node-fetch"
+      ]
+    },
+    "@ton-api/client@0.4.0_@ton+core@0.62.0__@ton+crypto@3.3.0_@ton+crypto@3.3.0": {
+      "integrity": "sha512-k3d6RzNWRDEZpVa9Gig2kHqp74tGvaK/imkjb08RIGxn+wKC7Yv5g98GnXEHf3srRkjtRCG0Nnjx8EsasOMJkw==",
+      "dependencies": [
+        "@ton/core",
+        "core-js-pure"
+      ]
+    },
+    "@ton-api/ton-adapter@0.4.1_@ton-api+client@0.4.0__@ton+core@0.62.0___@ton+crypto@3.3.0__@ton+crypto@3.3.0_@ton+core@0.62.0__@ton+crypto@3.3.0_@ton+crypto@3.3.0": {
+      "integrity": "sha512-snvd49M2PnDiIgMyeeIpGPTWI7ECnRYz4qIcFplv/mmYvV+6OiNM4UtHOplAh7sGR1JY1xBf+HP+RJ8qzCN2Hw==",
+      "dependencies": [
+        "@ton-api/client",
+        "@ton/core"
       ]
     },
     "@ton/core@0.62.0_@ton+crypto@3.3.0": {
@@ -187,6 +203,10 @@
       "dependencies": [
         "delayed-stream"
       ]
+    },
+    "core-js-pure@3.47.0": {
+      "integrity": "sha512-BcxeDbzUrRnXGYIVAGFtcGQVNpFcUhVjr6W7F8XktvQW2iJP9e66GP6xdKotCRFlrxBvNIBrhwKteRXqMV86Nw==",
+      "scripts": true
     },
     "d@1.0.2": {
       "integrity": "sha512-MOqHvMWF9/9MX6nza0KgvFH4HpMU0EF5uUDXqX/BtxtU8NfB0QzRtJ8Oe/6SuS4kbhyzVJwjd97EA4PKrzJ8bw==",
@@ -603,6 +623,8 @@
   "workspace": {
     "dependencies": [
       "jsr:@supabase/supabase-js@2.58.0",
+      "npm:@ton-api/client@0.4",
+      "npm:@ton-api/ton-adapter@~0.4.1",
       "npm:@ton/crypto@^3.3.0",
       "npm:@ton/ton@16",
       "npm:big-integer@1.6.52",

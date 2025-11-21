@@ -1,6 +1,6 @@
 import { generatePromoCode } from "./wordlist.ts";
 
-interface SupabaseUser {
+export interface SupabaseUser {
   email: string | null
   username: string
   firstname: string
@@ -14,6 +14,8 @@ interface SupabaseUser {
   ore: number
   spend: number
   cumSpend: number
+  timeZone: string
+  referredById: string | null
 }
 
 /*

@@ -6,6 +6,8 @@
     "npm:@supabase/auth-helpers-nextjs@0.9": "0.9.0_@supabase+supabase-js@2.83.0",
     "npm:@supabase/ssr@latest": "0.7.0_@supabase+supabase-js@2.83.0",
     "npm:@supabase/supabase-js@latest": "2.83.0",
+    "npm:@ton-api/client@0.4": "0.4.0_@ton+core@0.62.0__@ton+crypto@3.3.0_@ton+crypto@3.3.0",
+    "npm:@ton-api/ton-adapter@~0.4.1": "0.4.1_@ton-api+client@0.4.0__@ton+core@0.62.0___@ton+crypto@3.3.0__@ton+crypto@3.3.0_@ton+core@0.62.0__@ton+crypto@3.3.0_@ton+crypto@3.3.0",
     "npm:@ton/crypto@^3.3.0": "3.3.0",
     "npm:@ton/ton@16": "16.0.0_@ton+core@0.62.0__@ton+crypto@3.3.0_@ton+crypto@3.3.0",
     "npm:@types/node@20.11.5": "20.11.5",
@@ -2793,6 +2795,20 @@
     "@telegraf/types@7.1.0": {
       "integrity": "sha512-kGevOIbpMcIlCDeorKGpwZmdH7kHbqlk/Yj6dEpJMKEQw5lk0KVQY0OLXaCswy8GqlIVLd5625OB+rAntP9xVw=="
     },
+    "@ton-api/client@0.4.0_@ton+core@0.62.0__@ton+crypto@3.3.0_@ton+crypto@3.3.0": {
+      "integrity": "sha512-k3d6RzNWRDEZpVa9Gig2kHqp74tGvaK/imkjb08RIGxn+wKC7Yv5g98GnXEHf3srRkjtRCG0Nnjx8EsasOMJkw==",
+      "dependencies": [
+        "@ton/core",
+        "core-js-pure"
+      ]
+    },
+    "@ton-api/ton-adapter@0.4.1_@ton-api+client@0.4.0__@ton+core@0.62.0___@ton+crypto@3.3.0__@ton+crypto@3.3.0_@ton+core@0.62.0__@ton+crypto@3.3.0_@ton+crypto@3.3.0": {
+      "integrity": "sha512-snvd49M2PnDiIgMyeeIpGPTWI7ECnRYz4qIcFplv/mmYvV+6OiNM4UtHOplAh7sGR1JY1xBf+HP+RJ8qzCN2Hw==",
+      "dependencies": [
+        "@ton-api/client",
+        "@ton/core"
+      ]
+    },
     "@ton/core@0.62.0_@ton+crypto@3.3.0": {
       "integrity": "sha512-GCYlzzx11rSESKkiHvNy9tL8zWth+ZtUbvV29WH478FvBp8xTw24AyoigwXWNV+OLCAcnwlGhZpTpxjD3wzCwA==",
       "dependencies": [
@@ -3519,6 +3535,10 @@
     },
     "cookie@1.0.2": {
       "integrity": "sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA=="
+    },
+    "core-js-pure@3.47.0": {
+      "integrity": "sha512-BcxeDbzUrRnXGYIVAGFtcGQVNpFcUhVjr6W7F8XktvQW2iJP9e66GP6xdKotCRFlrxBvNIBrhwKteRXqMV86Nw==",
+      "scripts": true
     },
     "cross-spawn@7.0.6": {
       "integrity": "sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==",
@@ -6220,6 +6240,8 @@
         "npm:@supabase/auth-helpers-nextjs@0.9",
         "npm:@supabase/ssr@latest",
         "npm:@supabase/supabase-js@latest",
+        "npm:@ton-api/client@0.4",
+        "npm:@ton-api/ton-adapter@~0.4.1",
         "npm:@ton/crypto@^3.3.0",
         "npm:@ton/ton@16",
         "npm:@types/node@20.11.5",
