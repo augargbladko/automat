@@ -2,6 +2,7 @@
 import bigInt, { BigInteger } from "big-integer";
 import { SupabaseClient } from "supabase-jsr";
 import { Api, TelegramClient } from "telegram";
+import { UserStatus } from "../../mongodb/types.ts";
 import { Tables, TelegramUser } from "../../types/index.ts";
 import { delay } from "../../utils/index.ts";
 import { supabaseStoreArray } from "../database/supabase.ts";
@@ -43,16 +44,20 @@ async function StoreNewTelegramUsers(channel: string, result: { chats: Api.TypeC
 
   const users: TelegramUser[] = (result.users as Api.User[]).filter((u) => !u.fake && !u.bot && !u.scam).map((u) => {
     return {
-      date_joined: result.participants.find(p => p.userId.toString() === u.id.toString())?.date || 0,
       first_name: u.firstName || '',
-      id: 0,
       lang_code: u.langCode || 'en',
-      last_name: u.lastName || '',
-      phone: u.phone || '',
-      photo_url: '', // figure this out
-      premium: u.premium || false,
-      telegram_id: u.id.toString() || '',
+      is_premium: u.premium || false,
+      telegram_id: parseInt(u.id.toString()) || 0,
       username: u.username || '',
+      referred_by_id: 0,
+      user_level: 0,
+      spend: 0, // this section needs to be set from data
+      spend_total: 0,
+      time_zone: '',
+      user_status: UserStatus.none,
+      user_error: '',
+      treasure: 0,
+
 
       // this section needs to be set from data
       confirmed_email: false, // todo - set this properly

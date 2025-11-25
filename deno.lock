@@ -5,7 +5,6 @@
     "npm:@nextui-org/react@^2.2.10": "2.6.11_framer-motion@11.18.2__react@18.2.0__react-dom@18.2.0___react@18.2.0_react@18.2.0_react-dom@18.2.0__react@18.2.0_@nextui-org+system@2.4.6__framer-motion@11.18.2___react@18.2.0___react-dom@18.2.0____react@18.2.0__react@18.2.0__react-dom@18.2.0___react@18.2.0__@nextui-org+theme@2.4.5___tailwindcss@3.4.18____postcss@8.5.6____jiti@1.21.7__tailwindcss@3.4.18___postcss@8.5.6___jiti@1.21.7_@nextui-org+theme@2.4.5__tailwindcss@3.4.18___postcss@8.5.6___jiti@1.21.7_tailwindcss@3.4.18__postcss@8.5.6__jiti@1.21.7",
     "npm:@supabase/auth-helpers-nextjs@0.9": "0.9.0_@supabase+supabase-js@2.83.0",
     "npm:@supabase/ssr@latest": "0.7.0_@supabase+supabase-js@2.83.0",
-    "npm:@supabase/supabase-js@latest": "2.83.0",
     "npm:@ton-api/client@0.4": "0.4.0_@ton+core@0.62.0__@ton+crypto@3.3.0_@ton+crypto@3.3.0",
     "npm:@ton-api/ton-adapter@~0.4.1": "0.4.1_@ton-api+client@0.4.0__@ton+core@0.62.0___@ton+crypto@3.3.0__@ton+crypto@3.3.0_@ton+core@0.62.0__@ton+crypto@3.3.0_@ton+crypto@3.3.0",
     "npm:@ton/crypto@^3.3.0": "3.3.0",
@@ -34,7 +33,7 @@
     "npm:react-paginate@^8.2.0": "8.3.0_react@18.2.0",
     "npm:react-types@0.1": "0.1.0",
     "npm:react@18.2.0": "18.2.0",
-    "npm:supabase@^2.54.11": "2.58.5",
+    "npm:supabase@^2.61.2": "2.61.2",
     "npm:tailwindcss@^3.4.3": "3.4.18_postcss@8.5.6_jiti@1.21.7",
     "npm:telegraf@^4.16.3": "4.16.3_encoding@0.1.13",
     "npm:telegram@2.26.22": "2.26.22",
@@ -5714,8 +5713,8 @@
       ],
       "bin": true
     },
-    "supabase@2.58.5": {
-      "integrity": "sha512-mYZSkUIePTdmwlHd26Pff8wpmjfre8gcuWzrc5QqhZgZvCXugVzAQQhcjaQisw5kusbPQWNIjUwcHYEKmejhPw==",
+    "supabase@2.61.2": {
+      "integrity": "sha512-dSmCHErwEQrpSQb1PKzpwZqhEl8qj8KVzVtqJBcKROmPOeWZ9CAghxW5uX2B1bGKPjVXAN6MA4rP/Mr7+qmj1A==",
       "dependencies": [
         "bin-links",
         "https-proxy-agent",
@@ -6239,7 +6238,6 @@
         "npm:@nextui-org/react@^2.2.10",
         "npm:@supabase/auth-helpers-nextjs@0.9",
         "npm:@supabase/ssr@latest",
-        "npm:@supabase/supabase-js@latest",
         "npm:@ton-api/client@0.4",
         "npm:@ton-api/ton-adapter@~0.4.1",
         "npm:@ton/crypto@^3.3.0",
@@ -6268,7 +6266,7 @@
         "npm:react-paginate@^8.2.0",
         "npm:react-types@0.1",
         "npm:react@18.2.0",
-        "npm:supabase@^2.54.11",
+        "npm:supabase@^2.61.2",
         "npm:tailwindcss@^3.4.3",
         "npm:telegraf@^4.16.3",
         "npm:telegram@2.26.22",
