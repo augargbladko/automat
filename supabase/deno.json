@@ -18,5 +18,5 @@
     "@supabase/supabase-js": "npm:@supabase/supabase-js@2.84.0",
     "mongodb": "npm:mongodb@6.1.0"
   },
-  "nodeModulesDir": "manual"
+  "nodeModulesDir": "auto"
 }
