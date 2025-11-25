@@ -65,7 +65,7 @@ async function StoreNewTelegramUsers(channel: string, result: { chats: Api.TypeC
       treasure_flags: 0 // todo - from data
     } as TelegramUser
   });
-  await supabaseStoreArray(supabase, users, Tables.telegram_users);
+  await supabaseStoreArray(supabase, users, Tables.user_data);
 }
 
 async function GetWithFilter(

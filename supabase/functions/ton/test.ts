@@ -2,6 +2,7 @@ import { mnemonicNew } from "@ton/crypto";
 import { internal, TonClient, WalletContractV4 } from "@ton/ton";
 import { subscribeProfileToList } from "../mongodb/klaviyo.ts";
 import { createTelegramInitData, validateTelegramWebAppData } from "../mongodb/telegramInitData.ts";
+import { SupabaseUser, UserStatus } from "../mongodb/types.ts";
 import { getLastTonTransaction } from "./helpers.ts";
 import { getJettonBalance, transferAllJettonsAndCloseWallet } from "./jettons.ts";
 import { getTonBalance } from "./tonTokens.ts";
@@ -15,22 +16,23 @@ const testJetton = "EQACLXDwit01stiqK9FvYiJo15luVzfD5zU8uwDSq6JXxbP8";
 const testWallet = "UQC8gtRH_9FofdOmfCbxjtv9FYg7MP6e2xMlztHPwVVyXebk";
 
 export async function TestTgInitData() {
-  const supabaseUser = {
-    id: 456,
+  const supabaseUser: SupabaseUser = {
+    telegram_id: 456,
     username: "testuser",
-    firstname: "Test",
-    isPremium: true,
+    first_name: "Test",
+    is_premium: true,
     email: "email@email.email",
-    confirmedEmail: true,
-    telegramId: "123456789",
-    level: 3,
-    factor: 1.1,
-    nugs: 1000,
-    ore: 500,
+    confirmed_email: true,
+    user_level: 3,
     spend: 26,
-    cumSpend: 1546,
-    timeZone: "America/New_York",
-    referredById: null,
+    spend_total: 1546,
+    time_zone: "America/New_York",
+    referred_by_id: 0,
+    treasure: 2,
+    wallet_id: 12,
+    wallet_address: "",
+    user_status: UserStatus.none,
+    user_Error: "",
   }
   const initData = createTelegramInitData(supabaseUser);
   console.log("Telegram init data:", initData);

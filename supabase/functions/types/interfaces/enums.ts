@@ -1,4 +1,4 @@
 
 export enum Tables {
-  telegram_users = "telegram_users",
+  user_data = "user_data",
 }

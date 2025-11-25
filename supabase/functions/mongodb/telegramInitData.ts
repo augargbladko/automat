@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { SupabaseUser } from "./user.ts";
+import { SupabaseUser } from "./types.ts";
 
 interface ValidatedData {
   [key: string]: string;
@@ -21,10 +21,10 @@ interface ValidationResult {
 
 export function getTelegramUser(user: SupabaseUser): TelegramUser {
   return {
-    id: user.telegramId,
+    id: user.telegram_id.toString(),
     username: user.username || undefined,
-    first_name: user.firstname || undefined,
-    is_premium: user.isPremium || undefined,
+    first_name: user.first_name || undefined,
+    is_premium: user.is_premium || undefined,
   };
 }
 

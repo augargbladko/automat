@@ -7,87 +7,59 @@ export type Json =
   | Json[]
 
 export type Database = {
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
-      telegram_users: {
+      user_data: {
         Row: {
           confirmed_email: boolean | null
-          date_joined: number | null
           email: string | null
           first_name: string | null
-          lang_code: string | null
-          last_name: string | null
-          phone: string | null
-          photo_url: string | null
-          premium: boolean | null
-          telegram_id: string
-          tokens: number | null
-          ton_spend: number | null
-          tool_flags: number | null
-          treasure_flags: number | null
+          is_premium: boolean | null
+          referred_by_id: number | null
+          spend: number | null
+          spend_total: number | null
+          telegram_id: number
+          time_zone: string | null
+          treasure: number | null
+          user_error: string | null
+          user_level: number | null
+          user_status: string | null
           username: string | null
           wallet_address: string | null
           wallet_id: number | null
         }
         Insert: {
           confirmed_email?: boolean | null
-          date_joined?: number | null
           email?: string | null
           first_name?: string | null
-          lang_code?: string | null
-          last_name?: string | null
-          phone?: string | null
-          photo_url?: string | null
-          premium?: boolean | null
-          telegram_id: string
-          tokens?: number | null
-          ton_spend?: number | null
-          tool_flags?: number | null
-          treasure_flags?: number | null
+          is_premium?: boolean | null
+          referred_by_id?: number | null
+          spend?: number | null
+          spend_total?: number | null
+          telegram_id: number
+          time_zone?: string | null
+          treasure?: number | null
+          user_error?: string | null
+          user_level?: number | null
+          user_status?: string | null
           username?: string | null
           wallet_address?: string | null
           wallet_id?: number | null
         }
         Update: {
           confirmed_email?: boolean | null
-          date_joined?: number | null
           email?: string | null
           first_name?: string | null
-          lang_code?: string | null
-          last_name?: string | null
-          phone?: string | null
-          photo_url?: string | null
-          premium?: boolean | null
-          telegram_id?: string
-          tokens?: number | null
-          ton_spend?: number | null
-          tool_flags?: number | null
-          treasure_flags?: number | null
+          is_premium?: boolean | null
+          referred_by_id?: number | null
+          spend?: number | null
+          spend_total?: number | null
+          telegram_id?: number
+          time_zone?: string | null
+          treasure?: number | null
+          user_error?: string | null
+          user_level?: number | null
+          user_status?: string | null
           username?: string | null
           wallet_address?: string | null
           wallet_id?: number | null
@@ -231,10 +203,8 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {},
   },
 } as const
+

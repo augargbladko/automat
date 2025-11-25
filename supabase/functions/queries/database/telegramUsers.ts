@@ -11,7 +11,7 @@ export async function storeTelegramUsers(
   supabase: SupabaseClient,
   users: TelegramUser[]
 ): Promise<boolean> {
-  return await supabaseStoreArray(supabase, users, Tables.telegram_users)
+  return await supabaseStoreArray(supabase, users, Tables.user_data)
 }
 
 export async function storeTelegramUser(
@@ -19,9 +19,9 @@ export async function storeTelegramUser(
   user: TelegramUser
 ): Promise<boolean> {
   const { error } = await supabase
-    .from(Tables.telegram_users)
+    .from(Tables.user_data)
     .upsert(user, {
-      onConflict: tableConflictKeys[Tables.telegram_users],
+      onConflict: tableConflictKeys[Tables.user_data],
     })
   if (error) {
     console.log("storeTelegramUser error", error)

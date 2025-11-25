@@ -6,11 +6,11 @@
      */
 
 import { getWalletAddress } from "../ton/tonWallet.ts";
-import { SupabaseUser } from "./user.ts";
+import { SupabaseUser } from "./types.ts";
 
 export async function subscribeProfileToList(user: SupabaseUser): Promise<boolean> {
   if(!user.email) {
-    console.log('No email provided, skipping Klaviyo subscription.', user.id);
+    console.log('No email provided, skipping Klaviyo subscription.', user.telegram_id);
     return true;
   }
   const profileId = await subcribeOrUpdateEmail(user);
@@ -89,8 +89,8 @@ async function optUserIntoList(profileId: string, email: string) {
 async function subcribeOrUpdateEmail(
   user: SupabaseUser
 ): Promise<string> {
-  const { email, firstname, username, telegramId, isPremium } = user;
-  const tonWalletAddress = getWalletAddress(user.id);
+  const { email, first_name, username, telegram_id, is_premium, wallet_id } = user;
+  const tonWalletAddress = getWalletAddress(wallet_id);
 
   try {
     const response = await fetch('https://a.klaviyo.com/api/profile-import', {
@@ -106,15 +106,15 @@ async function subcribeOrUpdateEmail(
           type: 'profile',
           attributes: {
             email: email,
-            first_name: firstname || username || null,
-            external_id: telegramId,
+            first_name: first_name || username || null,
+            external_id: telegram_id,
             title: username || null,
             image: null,
             properties: {
-              telegram_id: telegramId,
+              telegram_id: telegram_id,
               user_name: username,
               ton_wallet: tonWalletAddress,
-              is_premium: isPremium,
+              is_premium: is_premium,
             },
           },
         },

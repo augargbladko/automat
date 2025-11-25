@@ -1,42 +1,40 @@
-CREATE TABLE telegram_users (
-  telegram_id VARCHAR(42) PRIMARY KEY,
-  premium boolean,
+CREATE TABLE user_data (
+  telegram_id integer PRIMARY KEY,
+  is_premium boolean,
   first_name text,
-  last_name text,
   username text,
-  phone text,
-  lang_code text,
-  photo_url text, -- photo url needs to be parsed, from users[] => users.photo.
-  date_joined integer, -- from participants[] => participant.date
 
-  -- below here, we're creating this data.
   wallet_id integer,
   wallet_address text,
-  email text,
+  email text DEFAULT '',
   confirmed_email boolean,
-  tokens double precision, -- we'll calculate points, level, spend, etc off this value
-  ton_spend double precision,
 
-  -- tracking data
-  -- what are we using this user for
-  -- have we created it
-  -- what are its current stats
-  tool_flags integer, -- 1/2/4/8 for the 4 tools, small to large
-  treasure_flags integer -- 1/2/4/8 for the 4 treasures, small to large
+  user_level integer,
+  treasure integer,
+  spend double precision,
+  spend_total double precision,
+  time_zone text,
+  referred_by_id integer DEFAULT 0,
+
+  user_status text DEFAULT 'none', -- none, created, funded, collected, converted, withdrawn, nsf, error,
+  user_error text DEFAULT ''
 );
 
-CREATE INDEX ON telegram_users (date_joined);
-CREATE INDEX ON telegram_users (wallet_id);
-CREATE INDEX ON telegram_users (wallet_address);
-CREATE INDEX ON telegram_users (email);
-CREATE INDEX ON telegram_users (confirmed_email);
-CREATE INDEX ON telegram_users (tokens);
-CREATE INDEX ON telegram_users (ton_spend);
-CREATE INDEX ON telegram_users (tokens);
-CREATE INDEX ON telegram_users (tokens);
+CREATE INDEX ON user_data (wallet_id);
+CREATE INDEX ON user_data (wallet_address);
+CREATE INDEX ON user_data (email);
+CREATE INDEX ON user_data (confirmed_email);
+CREATE INDEX ON user_data (user_level);
+CREATE INDEX ON user_data (treasure);
+CREATE INDEX ON user_data (spend);
+CREATE INDEX ON user_data (spend_total);
+CREATE INDEX ON user_data (time_zone);
+CREATE INDEX ON user_data (referred_by_id);
+CREATE INDEX ON user_data (user_status);
+CREATE INDEX ON user_data (user_error);
 
--- alter table public.telegram_users enable row level security;
--- CREATE POLICY "telegram_users_read" ON public.telegram_users FOR SELECT USING (true);
+alter table public.user_data enable row level security;
+CREATE POLICY "user_data_read" ON public.user_data FOR SELECT USING (true);
 
 
 /* ------ INSERT TRIGGER FUNCTIONALITY ---------

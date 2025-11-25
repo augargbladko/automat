@@ -1,13 +1,15 @@
-import { MongoClient } from "mongodb";
+import { Db, MongoClient } from "mongodb";
 
 // deno run --allow-all --env-file supabase/functions/mongodb/mongo.ts
 
-export async function MongoTest() {
-  console.log("DB URL:", Deno.env.get("DATABASE_URL"));
+export async function getDb(): Promise<Db> {
   const client = new MongoClient(Deno.env.get("DATABASE_URL")!);
   await client.connect();
+  return client.db("myFirstDatabase");
+}
 
-  const db = client.db("myFirstDatabase");
+export async function MongoTest() {
+  const db = await getDb()
   const tonPurchase = db.collection("TonPurchase");
   const first = await tonPurchase.findOne({});
   console.log("MongoDB Connection Test, first document:", first);
