@@ -11,11 +11,9 @@
     "npm:@ton/crypto@^3.3.0": "3.3.0",
     "npm:@ton/ton@16": "16.0.0_@ton+core@0.62.0__@ton+crypto@3.3.0_@ton+crypto@3.3.0",
     "npm:@types/node@20.11.5": "20.11.5",
-    "npm:@types/node@^24.2.0": "24.10.1",
     "npm:@types/react-dom@18.2.18": "18.2.18",
     "npm:@types/react@18.2.48": "18.2.48",
     "npm:autoprefixer@10.4.17": "10.4.17_postcss@8.4.33",
-    "npm:big-integer@1.6.52": "1.6.52",
     "npm:clsx@^2.1.0": "2.1.1",
     "npm:encoding@~0.1.13": "0.1.13",
     "npm:eslint-config-airbnb-typescript@18": "18.0.0_@typescript-eslint+eslint-plugin@7.18.0__@typescript-eslint+parser@7.18.0___eslint@8.57.1___typescript@5.3.3__eslint@8.57.1__typescript@5.3.3_@typescript-eslint+parser@7.18.0__eslint@8.57.1__typescript@5.3.3_eslint@8.57.1_typescript@5.3.3",
@@ -27,7 +25,6 @@
     "npm:ethers@^6.13.0": "6.15.0",
     "npm:framer-motion@^11.0.24": "11.18.2_react@18.2.0_react-dom@18.2.0__react@18.2.0",
     "npm:geist@^1.2.1": "1.5.1_next@16.0.4__react@18.2.0__react-dom@18.2.0___react@18.2.0_react@18.2.0_react-dom@18.2.0__react@18.2.0",
-    "npm:lodash@^4.17.21": "4.17.21",
     "npm:mongodb@6.1.0": "6.1.0",
     "npm:next-client-cookies@^1.1.1": "1.1.1_next@16.0.4__react@18.2.0__react-dom@18.2.0___react@18.2.0_react@18.2.0_react-dom@18.2.0__react@18.2.0",
     "npm:next@latest": "16.0.4_react@18.2.0_react-dom@18.2.0__react@18.2.0",
@@ -2868,12 +2865,6 @@
         "undici-types@6.19.8"
       ]
     },
-    "@types/node@24.10.1": {
-      "integrity": "sha512-GNWcUTRBgIRJD5zj+Tq0fKOJ5XZajIiBroOF0yvj2bSU1WvNdYS/dn9UxwsujGW4JX06dnHyjV2y9rRaybH0iQ==",
-      "dependencies": [
-        "undici-types@7.16.0"
-      ]
-    },
     "@types/node@24.2.0": {
       "integrity": "sha512-3xyG3pMCq3oYCNg7/ZP+E1ooTaGB4cG8JWRsqqOYQdbWNY4zbaV0Ennrd7stjiJEFZCaybcIgpTjJWHRfBSIDw==",
       "dependencies": [
@@ -4772,9 +4763,6 @@
     "lodash.merge@4.6.2": {
       "integrity": "sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ=="
     },
-    "lodash@4.17.21": {
-      "integrity": "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
-    },
     "loose-envify@1.4.0": {
       "integrity": "sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==",
       "dependencies": [
@@ -5906,9 +5894,6 @@
     "undici-types@7.10.0": {
       "integrity": "sha512-t5Fy/nfn+14LuOc2KNYg75vZqClpAiqscVvMygNnlsHBFpSXdJaYtXMcdNLpl/Qvc3P2cB3s6lOV51nqsFq4ag=="
     },
-    "undici-types@7.16.0": {
-      "integrity": "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw=="
-    },
     "unrs-resolver@1.11.1": {
       "integrity": "sha512-bSjt9pjaEBnNiGgc9rUiHGKv5l4/TGzDmYw3RhnkJGtLhbnnA/5qJj7x3dNDCRx/PJxu774LlH8lCOlB4hEfKg==",
       "dependencies": [
@@ -6116,24 +6101,13 @@
     }
   },
   "workspace": {
-    "dependencies": [
-      "npm:@supabase/supabase-js@2.84.0",
-      "npm:@ton-api/client@0.4",
-      "npm:@ton-api/ton-adapter@~0.4.1",
-      "npm:@ton/crypto@^3.3.0",
-      "npm:@ton/ton@16",
-      "npm:@types/node@^24.2.0",
-      "npm:big-integer@1.6.52",
-      "npm:lodash@^4.17.21",
-      "npm:mongodb@6.1.0",
-      "npm:telegram@2.26.22"
-    ],
     "packageJson": {
       "dependencies": [
         "npm:@eslint/js@^9.1.1",
         "npm:@nextui-org/react@^2.2.10",
         "npm:@supabase/auth-helpers-nextjs@0.9",
         "npm:@supabase/ssr@latest",
+        "npm:@supabase/supabase-js@2.84.0",
         "npm:@ton-api/client@0.4",
         "npm:@ton-api/ton-adapter@~0.4.1",
         "npm:@ton/crypto@^3.3.0",
