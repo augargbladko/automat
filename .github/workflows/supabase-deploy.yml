@@ -23,6 +23,7 @@ jobs:
           version: latest
 
       - run: |
+          deno install
           supabase link --project-ref $PROJECT_ID --password $SUPABASE_DB_PASSWORD --debug
           supabase db push
           supabase functions deploy
