@@ -23,6 +23,6 @@ jobs:
           version: latest
 
       - run: |
-          supabase link --project-ref $PROJECT_ID
+          supabase link --project-ref $PROJECT_ID --password $SUPABASE_DB_PASSWORD --debug
           supabase db push
           supabase functions deploy
