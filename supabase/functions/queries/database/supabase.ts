@@ -1,4 +1,4 @@
-import { createClient, SupabaseClient } from "supabase-jsr";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 import { tableConflictKeys } from "../../types/database.ts";
 import { Tables } from "../../types/interfaces/enums.ts";

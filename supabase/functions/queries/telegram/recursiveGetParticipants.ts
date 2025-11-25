@@ -1,6 +1,6 @@
 
+import { SupabaseClient } from "@supabase/supabase-js";
 import bigInt, { BigInteger } from "big-integer";
-import { SupabaseClient } from "supabase-jsr";
 import { Api, TelegramClient } from "telegram";
 import { UserStatus } from "../../mongodb/types.ts";
 import { Tables, TelegramUser } from "../../types/index.ts";
