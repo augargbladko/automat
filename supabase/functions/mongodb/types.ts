@@ -27,6 +27,13 @@ export interface SupabaseUser {
   referred_by_id: number
   user_status: UserStatus
   user_Error: string
+  operating_system: string
+  browser: string
+  category: string
+  screen_resolution: string
+  city: string
+  country_id: string
+  region_id: string
 }
 
 /*

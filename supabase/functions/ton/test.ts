@@ -15,8 +15,8 @@ const jettonAddress: string = 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs'
 const testJetton = "EQACLXDwit01stiqK9FvYiJo15luVzfD5zU8uwDSq6JXxbP8";
 const testWallet = "UQC8gtRH_9FofdOmfCbxjtv9FYg7MP6e2xMlztHPwVVyXebk";
 
-export async function TestTgInitData() {
-  const supabaseUser: SupabaseUser = {
+export function testSupabaseUser(): SupabaseUser {
+  return {
     telegram_id: 456,
     username: "testuser",
     first_name: "Test",
@@ -33,7 +33,18 @@ export async function TestTgInitData() {
     wallet_address: "",
     user_status: UserStatus.none,
     user_Error: "",
+    operating_system: "Android",
+    browser: "Chrome",
+    category: "mobile",
+    screen_resolution: "360x780",
+    city: "New York",
+    country_id: "US",
+    region_id: "US-NY",
   }
+}
+
+  export async function TestTgInitData() {
+  const supabaseUser: SupabaseUser = testSupabaseUser();
   const initData = createTelegramInitData(supabaseUser);
   console.log("Telegram init data:", initData);
   
@@ -97,5 +108,3 @@ async function Test() {
   await TestSendStuff();
   Deno.exit();
 }
-
-Test()
