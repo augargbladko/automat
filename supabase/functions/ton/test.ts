@@ -28,6 +28,8 @@ export function testSupabaseUser(): SupabaseUser {
     spend_total: 1546,
     time_zone: "America/New_York",
     referred_by_id: 0,
+    referral_group: 1,
+    referral_pos: 1,
     treasure: 2,
     wallet_id: 12,
     wallet_address: "",

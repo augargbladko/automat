@@ -20,6 +20,8 @@ CREATE TABLE user_data (
   user_error text DEFAULT ''
 );
 
+										
+
 CREATE INDEX ON user_data (wallet_id);
 CREATE INDEX ON user_data (wallet_address);
 CREATE INDEX ON user_data (email);

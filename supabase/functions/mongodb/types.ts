@@ -25,6 +25,8 @@ export interface SupabaseUser {
   spend_total: number
   time_zone: string
   referred_by_id: number
+  referral_group: number
+  referral_pos: number
   user_status: UserStatus
   user_Error: string
   operating_system: string
