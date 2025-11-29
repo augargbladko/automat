@@ -1,9 +1,9 @@
 // Add the user's play, purchase, and Ore/NUGS
 
-import { convertDateToDayString, getUserDayString } from "./consts.ts";
-import { getGoldenSpinResult } from "./goldenSpin.ts";
-import { LEVEL_PACKAGES } from "./packages.ts";
-import { defaultItemsState, MongoUserUpdate, PackageType, SupabaseUser } from "./types.ts";
+import { convertDateToDayString, getUserDayString } from "../utils/consts.ts";
+import { getGoldenSpinResult } from "./data/goldenSpin.ts";
+import { LEVEL_PACKAGES } from "./data/packages.ts";
+import { defaultItemsState, MongoUserUpdate, PackageType, SupabaseUser } from "./data/types.ts";
 import { defaultSlotsPlayState, getMaxEnergy, getUser, updateUser } from "./user.ts";
 
 

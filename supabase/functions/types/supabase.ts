@@ -11,11 +11,20 @@ export type Database = {
     Tables: {
       user_data: {
         Row: {
+          browser: string | null
+          category: string | null
+          city: string | null
           confirmed_email: boolean | null
+          country_id: string | null
           email: string | null
           first_name: string | null
           is_premium: boolean | null
+          operating_system: string | null
+          referral_group: number | null
+          referral_pos: number | null
           referred_by_id: number | null
+          region_id: string | null
+          screen_resolution: string | null
           spend: number | null
           spend_total: number | null
           telegram_id: number
@@ -29,11 +38,20 @@ export type Database = {
           wallet_id: number | null
         }
         Insert: {
+          browser?: string | null
+          category?: string | null
+          city?: string | null
           confirmed_email?: boolean | null
+          country_id?: string | null
           email?: string | null
           first_name?: string | null
           is_premium?: boolean | null
+          operating_system?: string | null
+          referral_group?: number | null
+          referral_pos?: number | null
           referred_by_id?: number | null
+          region_id?: string | null
+          screen_resolution?: string | null
           spend?: number | null
           spend_total?: number | null
           telegram_id: number
@@ -47,11 +65,20 @@ export type Database = {
           wallet_id?: number | null
         }
         Update: {
+          browser?: string | null
+          category?: string | null
+          city?: string | null
           confirmed_email?: boolean | null
+          country_id?: string | null
           email?: string | null
           first_name?: string | null
           is_premium?: boolean | null
+          operating_system?: string | null
+          referral_group?: number | null
+          referral_pos?: number | null
           referred_by_id?: number | null
+          region_id?: string | null
+          screen_resolution?: string | null
           spend?: number | null
           spend_total?: number | null
           telegram_id?: number

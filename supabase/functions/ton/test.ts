@@ -1,8 +1,8 @@
 import { mnemonicNew } from "@ton/crypto";
 import { internal, TonClient, WalletContractV4 } from "@ton/ton";
-import { subscribeProfileToList } from "../mongodb/klaviyo.ts";
-import { createTelegramInitData, validateTelegramWebAppData } from "../mongodb/telegramInitData.ts";
-import { SupabaseUser, UserStatus } from "../mongodb/types.ts";
+import { createTelegramInitData, validateTelegramWebAppData } from "../users/data/telegramInitData.ts";
+import { SupabaseUser, UserStatus } from "../users/data/types.ts";
+import { subscribeProfileToList } from "../users/klaviyo.ts";
 import { getLastTonTransaction } from "./helpers.ts";
 import { getJettonBalance, transferAllJettonsAndCloseWallet } from "./jettons.ts";
 import { getTonBalance } from "./tonTokens.ts";
@@ -61,7 +61,7 @@ export async function TestSendStuff() {
   console.log("Last transaction hash:", hash);
   const balance = await getJettonBalance(jettonAddress, testJetton);
   console.log("Jetton balance:", balance.toString());
-  await transferAllJettonsAndCloseWallet(0, testWallet, testJetton);
+  await transferAllJettonsAndCloseWallet(0, 1, testWallet, testJetton);
 }
 
 export async function TestTonStuff() {
@@ -73,7 +73,7 @@ export async function TestTonStuff() {
   // Create wallet contracts
   const wallets: WalletContractV4[] = []
   for (let i = 0; i < 10; i++) { 
-    wallets.push(await getWallet(i));
+    wallets.push(await getWallet(i, 1));
     console.log("Wallet address:", i, wallets[wallets.length - 1].address.toString({ bounceable: false }));
   }
 

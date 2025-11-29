@@ -1,4 +1,4 @@
 
 import { Database } from "./supabase.ts";
 
-export type TelegramUser = Database["public"]["Tables"]["user_data"]["Row"]
+export type UserUpsert = Database["public"]['Tables']['user_data']['Insert'];

@@ -6,7 +6,7 @@
      */
 
 import { getWalletAddress } from "../ton/tonWallet.ts";
-import { SupabaseUser } from "./types.ts";
+import { SupabaseUser } from "./data/types.ts";
 
 export async function subscribeProfileToList(user: SupabaseUser): Promise<boolean> {
   if(!user.email) {
@@ -89,8 +89,8 @@ async function optUserIntoList(profileId: string, email: string) {
 async function subcribeOrUpdateEmail(
   user: SupabaseUser
 ): Promise<string> {
-  const { email, first_name, username, telegram_id, is_premium, wallet_id } = user;
-  const tonWalletAddress = getWalletAddress(wallet_id);
+  const { email, first_name, username, telegram_id, is_premium, wallet_id, referral_group } = user;
+  const tonWalletAddress = getWalletAddress(wallet_id, referral_group);
 
   try {
     const response = await fetch('https://a.klaviyo.com/api/profile-import', {

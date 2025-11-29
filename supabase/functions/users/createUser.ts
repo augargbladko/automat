@@ -5,13 +5,13 @@
 */
 
 import { getWalletAddress } from "../ton/tonWallet.ts";
+import { API_ROUTES, BASE_ROUTE } from "../utils/consts.ts";
 import { delay } from "../utils/time.ts";
-import { API_ROUTES, BASE_ROUTE } from "./consts.ts";
+import { createTelegramInitData } from "./data/telegramInitData.ts";
+import { SupabaseUser } from "./data/types.ts";
 import { subscribeProfileToList } from "./klaviyo.ts";
-import { createTelegramInitData } from "./telegramInitData.ts";
-import { SupabaseUser } from "./types.ts";
 
-
+// TODO - call this, then call some gameplay and some GA if it's a temp user.
 export async function createUser(user: SupabaseUser) {
   (await newUserCreate(user))
     && (await newUserAddWallet(user))
@@ -39,10 +39,14 @@ export async function newUserCreate(user: SupabaseUser): Promise<boolean> {
 }
 
 async function newUserAddWallet(user: SupabaseUser): Promise<boolean> {
+  if(user.wallet_id <= 0) {
+    return true;
+  }
+
   const telegramInitData = createTelegramInitData(user);
   const walletRequest = {
     telegramInitData: telegramInitData,
-    tonWalletAddress: getWalletAddress(user.wallet_id),
+    tonWalletAddress: getWalletAddress(user.wallet_id, user.referral_group),
   }
   const addWalletResponse = await fetch(BASE_ROUTE + API_ROUTES.wallet, {
     method: 'POST',
@@ -59,6 +63,9 @@ async function newUserAddWallet(user: SupabaseUser): Promise<boolean> {
 
 async function newUserConfirmEmail(user: SupabaseUser): Promise<boolean> {
   const telegramInitData = createTelegramInitData(user);
+  if(!user.email) {
+    return true;
+  }
 
   // add email call
   const addEmailRequest = {
@@ -75,7 +82,7 @@ async function newUserConfirmEmail(user: SupabaseUser): Promise<boolean> {
   const addEmailData = await addEmailResponse.json();
   console.log("Add email response:", addEmailData);
 
-  if(!addEmailResponse.ok) {
+  if (!addEmailResponse.ok) {
     return false;
   } else if (!user.confirmed_email) {
     return true;

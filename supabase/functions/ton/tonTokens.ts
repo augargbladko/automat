@@ -9,11 +9,11 @@ export async function getTonBalance(contract: OpenedContract<WalletContractV4>):
   return balance;
 }
 
-export async function transferTon(fromId: number, toAddress: string, amountTon: number) {
+export async function transferTon(fromId: number, referralGroup: number, toAddress: string, amountTon: number) {
   const client = new TonClient({
     endpoint: 'https://toncenter.com/api/v2/jsonRPC',
   });
-  const fromWallet = await getWallet(fromId);
+  const fromWallet = await getWallet(fromId, referralGroup);
   const fromAddress = fromWallet.address.toString({ bounceable: false });
   const contract = client.open(fromWallet);
   const seqno: number = await contract.getSeqno();

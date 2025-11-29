@@ -3,7 +3,6 @@
 // This enables autocomplete, go to definition, etc.
 
 import { secureConnectToSupabase } from "../queries/database/supabase.ts";
-import { recursiveGetParticipants } from "../queries/telegram/recursiveGetParticipants.ts";
 import { testClient } from "../queries/telegram/testClient.ts";
 import { denoServe, handleCORS } from "../utils/index.ts";
 
@@ -17,7 +16,6 @@ denoServe(
     if (channel) {
       const supabase = secureConnectToSupabase()
         const client = await testClient();
-      await recursiveGetParticipants(client, supabase, channel);
       return new Response(JSON.stringify({ success: true }), {
         headers: { "Content-Type": "application/json" },
       })

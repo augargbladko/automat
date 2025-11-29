@@ -1,22 +1,22 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import {
   Tables,
-  TelegramUser,
+  UserUpsert,
   tableConflictKeys
 } from "../../types/index.ts";
 import { supabaseStoreArray } from "./supabase.ts";
 
 
-export async function storeTelegramUsers(
+export async function storeUsers(
   supabase: SupabaseClient,
-  users: TelegramUser[]
+  users: UserUpsert[]
 ): Promise<boolean> {
   return await supabaseStoreArray(supabase, users, Tables.user_data)
 }
 
-export async function storeTelegramUser(
+export async function storeUser(
   supabase: SupabaseClient,
-  user: TelegramUser
+  user: UserUpsert
 ): Promise<boolean> {
   const { error } = await supabase
     .from(Tables.user_data)

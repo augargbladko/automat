@@ -1,7 +1,7 @@
-import { SupabaseUser } from "../mongodb/types.ts";
-import { generatePromoCode } from "../mongodb/wordlist.ts";
 import { testSupabaseUser } from "../ton/test.ts";
 import { getWalletAddress } from "../ton/tonWallet.ts";
+import { SupabaseUser } from "../users/data/types.ts";
+import { generatePromoCode } from "../users/data/wordlist.ts";
 
 export enum GaType {
   initial = "initial",
@@ -94,7 +94,7 @@ const deviceInfo = (user: SupabaseUser): GaDevice => {
 
 async function createCreationGA(user: SupabaseUser, now: number): Promise<MpEvent[]> {
   const session_id = now.toString()
-  const wallet = await getWalletAddress(user.wallet_id);
+  const wallet = await getWalletAddress(user.wallet_id, user.referral_group);
   return [
       {
         name: EventName.wallet_connected,

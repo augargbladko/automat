@@ -42,8 +42,8 @@ async function getJettonWalletAddress(fromWallet: string, jettonAddress: string)
 }
 
 
-export async function transferAllJettonsAndCloseWallet(fromId: number, toAddress: string, jettonAddress: string) {
-  const fromWallet = await getWallet(fromId);
+export async function transferAllJettonsAndCloseWallet(fromId: number, referralGroup: number, toAddress: string, jettonAddress: string) {
+  const fromWallet = await getWallet(fromId, referralGroup);
   const fromAddress = fromWallet.address.toString({ bounceable: false });
 
   const contract = new TonClient({

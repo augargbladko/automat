@@ -1,7 +1,7 @@
-import { API_ROUTES, BASE_ROUTE } from "./consts.ts";
-import { getDb } from "./mongo.ts";
-import { createTelegramInitData } from "./telegramInitData.ts";
-import { ItemsOwnedState, MongoUser, MongoUserUpdate, SlotsPlayState, SlotsResult, SupabaseUser } from "./types.ts";
+import { getDb } from "../mongodb/mongo.ts";
+import { API_ROUTES, BASE_ROUTE } from "../utils/consts.ts";
+import { createTelegramInitData } from "./data/telegramInitData.ts";
+import { ItemsOwnedState, MongoUser, MongoUserUpdate, SlotsPlayState, SlotsResult, SupabaseUser } from "./data/types.ts";
 
 
 

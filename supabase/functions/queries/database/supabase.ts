@@ -2,6 +2,7 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
 import { tableConflictKeys } from "../../types/database.ts";
 import { Tables } from "../../types/interfaces/enums.ts";
+import { Database } from "../../types/supabase.ts";
 import {
   supabaseAnonKey,
   supabaseServiceRoleKey,
@@ -9,8 +10,8 @@ import {
 } from "../../utils/index.ts";
 
 
-export function secureConnectToSupabase(): SupabaseClient {
-  const supabaseClient: SupabaseClient = createClient(
+export function secureConnectToSupabase(): SupabaseClient<Database> {
+  const supabaseClient: SupabaseClient<Database> = createClient<Database>(
     supabaseUrl,
     supabaseAnonKey,
     {
@@ -24,7 +25,7 @@ export function secureConnectToSupabase(): SupabaseClient {
 
 export function connectToSupabase(req: Request): SupabaseClient {
   const authHeader = req.headers.get("Authorization")!
-  const supabaseClient: SupabaseClient = createClient(
+  const supabaseClient: SupabaseClient = createClient<Database>(
     supabaseUrl,
     supabaseAnonKey,
     { global: { headers: { Authorization: authHeader } } }

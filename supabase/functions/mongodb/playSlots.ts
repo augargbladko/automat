@@ -1,8 +1,8 @@
+import { createTelegramInitData } from "../users/data/telegramInitData.ts";
+import { MongoUser, SlotsPlayState, SupabaseUser } from "../users/data/types.ts";
+import { getCurrentEnergy, getUser } from "../users/user.ts";
+import { API_ROUTES, BASE_ROUTE } from "../utils/consts.ts";
 import { delay } from "../utils/time.ts";
-import { API_ROUTES, BASE_ROUTE } from "./consts.ts";
-import { createTelegramInitData } from "./telegramInitData.ts";
-import { MongoUser, SlotsPlayState, SupabaseUser } from "./types.ts";
-import { getCurrentEnergy, getUser } from "./user.ts";
 
 
 export async function playSlots(user: SupabaseUser) {
