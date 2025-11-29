@@ -1,8 +1,8 @@
 import { mnemonicToPrivateKey } from "@ton/crypto";
 import { WalletContractV4 } from "@ton/ton";
 
-export async function getPublicKey(referralGroup: number) {
-  return (await mnemonicToPrivateKey((Deno.env.get(referralGroup === 0 ? "TON_TEMP_MNEMONIC" : "TON_MNEMONIC") || "").split(" "))).publicKey;
+export async function getPublicKey(referralGroup: number | null) {
+  return (await mnemonicToPrivateKey((Deno.env.get(!referralGroup ? "TON_TEMP_MNEMONIC" : "TON_MNEMONIC") || "").split(" "))).publicKey;
 }
 
 export async function getSecretKey() {
@@ -13,7 +13,7 @@ export async function getWallet(id: number, referralGroup: number): Promise<Wall
   return WalletContractV4.create({ workchain: 0, publicKey: (await getPublicKey(referralGroup)), walletId: id });
 }
 
-export async function getWalletAddress(id: number, referralGroup: number): Promise<string> {
+export async function getWalletAddress(id: number | null, referralGroup: number | null): Promise<string> {
   const w = WalletContractV4.create({ workchain: 0, publicKey: (await getPublicKey(referralGroup)), walletId: id });
   const address = w.address.toString({ bounceable: false });
   console.log('created address for id:', id, address);

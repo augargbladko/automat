@@ -1,41 +1,18 @@
 
 export enum UserStatus {
+  // initial state
   none = "none",
-  created = "created",
+  // activity statuses, can be live or complete, can also fall out to error
+  live = "live",
+  complete = "complete",
+  // withdrawal statuses
   funded = "funded",
   collected = "collected",
   converted = "converted",
   withdrawn = "withdrawn",
   nsf = "nsf",
+  // error state
   error = "error",
-}
-
-export interface SupabaseUser {
-  telegram_id: number
-  is_premium: boolean
-  first_name: string
-  username: string
-  wallet_id: number
-  wallet_address: string
-  email: string
-  confirmed_email: boolean
-  user_level: number
-  treasure: number
-  spend: number
-  spend_total: number
-  time_zone: string
-  referred_by_id: number
-  referral_group: number
-  referral_pos: number
-  user_status: UserStatus
-  user_Error: string
-  operating_system: string
-  browser: string
-  category: string
-  screen_resolution: string
-  city: string
-  country_id: string
-  region_id: string
 }
 
 /*
@@ -43,7 +20,6 @@ export interface SupabaseUser {
   Achievements - what are their completed/current acheivements? (this will be a big gap, as we're not creating 100k of these objects?)
 
   All of these will be missing; it's not ideal.
-      referredBy: Prisma.$UserPayload<ExtArgs> | null
       achievements: Prisma.$AchievementPayload<ExtArgs>[]
       completedTasks: Prisma.$UserTaskPayload<ExtArgs>[]
       quizResponses: Prisma.$QuizResponsePayload<ExtArgs>[]

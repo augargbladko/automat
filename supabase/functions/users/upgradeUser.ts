@@ -1,13 +1,14 @@
 // Add the user's play, purchase, and Ore/NUGS
 
+import { UserData } from "../types/index.ts";
 import { convertDateToDayString, getUserDayString } from "../utils/consts.ts";
 import { getGoldenSpinResult } from "./data/goldenSpin.ts";
 import { LEVEL_PACKAGES } from "./data/packages.ts";
-import { defaultItemsState, MongoUserUpdate, PackageType, SupabaseUser } from "./data/types.ts";
+import { defaultItemsState, MongoUserUpdate, PackageType } from "./data/types.ts";
 import { defaultSlotsPlayState, getMaxEnergy, getUser, updateUser } from "./user.ts";
 
 
-export async function setUserData(user: SupabaseUser) {
+export async function setUserData(user: UserData) {
   const mongoUser = await getUser(user);
   if (!mongoUser) {
     console.error("Cannot set user data, user not found:", user.telegram_id);
@@ -23,7 +24,7 @@ export async function setUserData(user: SupabaseUser) {
   const userNow = new Date();
   userNow.setMinutes(userNow.getMinutes() - Math.random() * 1200); // set to up to 20 minutes ago
   const update: MongoUserUpdate = {
-    level: user.user_level,
+    level: user.user_level || 0,
     createdAt: createdNow,
     createdDay: convertDateToDayString(createdNow),
     slotsLastPlayed: userNow.toISOString(), // set to 10 minutes ago to allow immediate play
@@ -35,20 +36,21 @@ export async function setUserData(user: SupabaseUser) {
   const spinResult = getGoldenSpinResult();
   update.goldenSpinState = {
     packageType: PackageType.levels,
-    packageId: user.user_level,
+    packageId: user.user_level || 0,
     result: spinResult.result,
     points: spinResult.points,
     tokens: spinResult.tokens,
     readyToCollect: false,
   };
-  if (user.treasure > 0) {
+  const treasure = user.treasure || 0;
+  if (treasure > 0) {
     update.itemsOwnedState = {
       ...(mongoUser.itemsOwnedState || defaultItemsState()),
       treasure: {
-        1: user.treasure >= 1 && Math.random() > 0.2 ? 1 : 0, // add a little randomness, so not everyone has all treasures
-        2: user.treasure >= 2 && Math.random() > 0.15 ? 1 : 0,
-        3: user.treasure >= 3 && Math.random() > 0.1 ? 1 : 0,
-        4: user.treasure >= 4 && Math.random() > 0.05 ? 1 : 0
+        1: treasure >= 1 && Math.random() > 0.2 ? 1 : 0, // add a little randomness, so not everyone has all treasures
+        2: treasure >= 2 && Math.random() > 0.15 ? 1 : 0,
+        3: treasure >= 3 && Math.random() > 0.1 ? 1 : 0,
+        4: treasure >= 4 && Math.random() > 0.05 ? 1 : 0
       },
     }
   }
@@ -82,7 +84,7 @@ export async function setUserData(user: SupabaseUser) {
   await updateUser(update, user);
 }
 
-/*export async function updateUserPlayData(user: SupabaseUser) {
+/*export async function updateUserPlayData(user: UserData) {
   const mongoUser = await getUser(user);
   if (!mongoUser || !mongoUser.slotsPlayState) {
     console.error("Cannot set user data, user not found:", user.telegramId);

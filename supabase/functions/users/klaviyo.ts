@@ -6,9 +6,9 @@
      */
 
 import { getWalletAddress } from "../ton/tonWallet.ts";
-import { SupabaseUser } from "./data/types.ts";
+import { UserData } from "../types/index.ts";
 
-export async function subscribeProfileToList(user: SupabaseUser): Promise<boolean> {
+export async function subscribeProfileToList(user: UserData): Promise<boolean> {
   if(!user.email) {
     console.log('No email provided, skipping Klaviyo subscription.', user.telegram_id);
     return true;
@@ -87,7 +87,7 @@ async function optUserIntoList(profileId: string, email: string) {
 }
 
 async function subcribeOrUpdateEmail(
-  user: SupabaseUser
+  user: UserData
 ): Promise<string> {
   const { email, first_name, username, telegram_id, is_premium, wallet_id, referral_group } = user;
   const tonWalletAddress = getWalletAddress(wallet_id, referral_group);

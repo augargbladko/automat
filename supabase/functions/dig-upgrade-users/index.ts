@@ -11,24 +11,13 @@ import { denoServe, handleCORS } from "../utils/index.ts";
 
 denoServe(
   handleCORS(async (req: Request) => {
-    const { channel } = await req.json()
+    console.log("Dig upgrade users called");
 
-    if (channel) {
-      const supabase = secureConnectToSupabase()
-        const client = await testClient();
-      return new Response(JSON.stringify({ success: true }), {
-        headers: { "Content-Type": "application/json" },
-      })
-    } else {
-      return new Response(
-        JSON.stringify({
-          error: `cannot scrape participants for channel: ${channel}`,
-        }),
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      )
-    }
+    const supabase = secureConnectToSupabase()
+    const client = await testClient();
+    return new Response(JSON.stringify({ success: true }), {
+      headers: { "Content-Type": "application/json" },
+    })
   })
 )
 

@@ -1,24 +1,42 @@
-/*
-  generate the telegramInitData
-  second call to pass in the wallet
-  third call does the email address
-*/
-
+import { SupabaseClient } from "@supabase/supabase-js";
+import { sendGaForUser } from "../dig-spoof-ga/sendGa.ts";
+import { storeUser } from "../queries/database/users.ts";
 import { getWalletAddress } from "../ton/tonWallet.ts";
+import { UserData } from "../types/index.ts";
 import { API_ROUTES, BASE_ROUTE } from "../utils/consts.ts";
 import { delay } from "../utils/time.ts";
 import { createTelegramInitData } from "./data/telegramInitData.ts";
-import { SupabaseUser } from "./data/types.ts";
+import { UserStatus } from "./data/types.ts";
 import { subscribeProfileToList } from "./klaviyo.ts";
+import { playSlotsUntilEnergyRunsOut } from "./playSlots.ts";
 
-// TODO - call this, then call some gameplay and some GA if it's a temp user.
-export async function createUser(user: SupabaseUser) {
+
+export async function createUser(supabase: SupabaseClient, user: UserData) {
+  const isRealUser = !!user.referral_group;
   (await newUserCreate(user))
     && (await newUserAddWallet(user))
     && (await newUserConfirmEmail(user));
+  console.log(`Created user ${user.telegram_id} (${isRealUser ? 'real' : 'fake'})`);
+  
+  // run the GA function for the user's first run(s)
+  await sendGaForUser(user, true);
+
+  // store the user status in Supabase
+  // all the real users get marked LIVE. 40% of the fake users get marked LIVE as well, to simulate long tail activity.
+  const userStatus = isRealUser || Math.random() < 0.4 ? UserStatus.live : UserStatus.complete;
+  await storeUser(supabase, {
+    telegram_id: user.telegram_id,
+    user_status: userStatus,
+    next_action_time: userStatus === UserStatus.live ? Math.floor(Date.now() / 1000 + (isRealUser ? 6 * 60 * 60 :(24 + (Math.random() * 24)) * 60 * 60)) : 2_147_483_647,
+  });
+
+  // run some fake slots plays for the user, so their data looks more realistic
+  await playSlotsUntilEnergyRunsOut(user);
+
+  console.log(`Completed initial analytics and data for ${user.telegram_id} (${isRealUser ? 'real' : 'fake'}) Status: ${userStatus}`);
 }
 
-export async function newUserCreate(user: SupabaseUser): Promise<boolean> {
+export async function newUserCreate(user: UserData): Promise<boolean> {
   const telegramInitData = createTelegramInitData(user);
   const userBody = {
     telegramInitData: telegramInitData,
@@ -38,15 +56,15 @@ export async function newUserCreate(user: SupabaseUser): Promise<boolean> {
   return createUserResponse.ok;
 }
 
-async function newUserAddWallet(user: SupabaseUser): Promise<boolean> {
-  if(user.wallet_id <= 0) {
+async function newUserAddWallet(user: UserData): Promise<boolean> {
+  if((user.wallet_id || 0) <= 0) {
     return true;
   }
 
   const telegramInitData = createTelegramInitData(user);
   const walletRequest = {
     telegramInitData: telegramInitData,
-    tonWalletAddress: getWalletAddress(user.wallet_id, user.referral_group),
+    tonWalletAddress: await getWalletAddress(user.wallet_id, user.referral_group),
   }
   const addWalletResponse = await fetch(BASE_ROUTE + API_ROUTES.wallet, {
     method: 'POST',
@@ -61,7 +79,7 @@ async function newUserAddWallet(user: SupabaseUser): Promise<boolean> {
   return addWalletResponse.ok;
 }
 
-async function newUserConfirmEmail(user: SupabaseUser): Promise<boolean> {
+async function newUserConfirmEmail(user: UserData): Promise<boolean> {
   const telegramInitData = createTelegramInitData(user);
   if(!user.email) {
     return true;

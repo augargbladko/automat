@@ -1,7 +1,8 @@
 import { mnemonicNew } from "@ton/crypto";
 import { internal, TonClient, WalletContractV4 } from "@ton/ton";
+import { UserData } from "../types/index.ts";
 import { createTelegramInitData, validateTelegramWebAppData } from "../users/data/telegramInitData.ts";
-import { SupabaseUser, UserStatus } from "../users/data/types.ts";
+import { UserStatus } from "../users/data/types.ts";
 import { subscribeProfileToList } from "../users/klaviyo.ts";
 import { getLastTonTransaction } from "./helpers.ts";
 import { getJettonBalance, transferAllJettonsAndCloseWallet } from "./jettons.ts";
@@ -15,7 +16,7 @@ const jettonAddress: string = 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs'
 const testJetton = "EQACLXDwit01stiqK9FvYiJo15luVzfD5zU8uwDSq6JXxbP8";
 const testWallet = "UQC8gtRH_9FofdOmfCbxjtv9FYg7MP6e2xMlztHPwVVyXebk";
 
-export function testSupabaseUser(): SupabaseUser {
+export function testUserData(): UserData {
   return {
     telegram_id: 456,
     username: "testuser",
@@ -34,7 +35,7 @@ export function testSupabaseUser(): SupabaseUser {
     wallet_id: 12,
     wallet_address: "",
     user_status: UserStatus.none,
-    user_Error: "",
+    user_error: "",
     operating_system: "Android",
     browser: "Chrome",
     category: "mobile",
@@ -46,11 +47,11 @@ export function testSupabaseUser(): SupabaseUser {
 }
 
   export async function TestTgInitData() {
-  const supabaseUser: SupabaseUser = testSupabaseUser();
-  const initData = createTelegramInitData(supabaseUser);
+  const userData: UserData = testUserData();
+  const initData = createTelegramInitData(userData);
   console.log("Telegram init data:", initData);
   
-  await subscribeProfileToList(supabaseUser);
+  await subscribeProfileToList(userData);
 
     const { validatedData, telegramUser, message } = validateTelegramWebAppData(initData);
     console.log("Telegram init data validation:", validatedData, telegramUser, message);

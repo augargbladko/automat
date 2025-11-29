@@ -1,7 +1,8 @@
 import { getDb } from "../mongodb/mongo.ts";
+import { UserData } from "../types/index.ts";
 import { API_ROUTES, BASE_ROUTE } from "../utils/consts.ts";
 import { createTelegramInitData } from "./data/telegramInitData.ts";
-import { ItemsOwnedState, MongoUser, MongoUserUpdate, SlotsPlayState, SlotsResult, SupabaseUser } from "./data/types.ts";
+import { ItemsOwnedState, MongoUser, MongoUserUpdate, SlotsPlayState, SlotsResult } from "./data/types.ts";
 
 
 
@@ -63,12 +64,12 @@ export function getEnergyRecoveryRate(level: number): number {
   return getMaxEnergy(level) / 3600;
 }
 
-export function getMaxEnergy(level: number) {
-  return level === 0 ? 2500 : level === 1 ? 5000 : 5000 + level * 500; // 5, 10, 12-20;
+export function getMaxEnergy(level: number | null) {
+  return !level ? 2500 : level === 1 ? 5000 : 5000 + level * 500; // 5, 10, 12-20;
 }
 
 
-export async function getUser(user: SupabaseUser): Promise<MongoUser> {
+export async function getUser(user: UserData): Promise<MongoUser> {
   const telegramInitData = createTelegramInitData(user);
   const userBody = {
     telegramInitData: telegramInitData,
@@ -87,7 +88,7 @@ export async function getUser(user: SupabaseUser): Promise<MongoUser> {
   return mongoUser;
 }
 
-export async function updateUser(update: MongoUserUpdate, user: SupabaseUser): Promise<boolean> {
+export async function updateUser(update: MongoUserUpdate, user: UserData): Promise<boolean> {
   const db = await getDb()
   const users = db.collection("User");
   const dbUser = await users.findOne({ where: { telegramId: user.telegram_id } });

@@ -1,6 +1,6 @@
-import { testSupabaseUser } from "../ton/test.ts";
+import { testUserData } from "../ton/test.ts";
 import { getWalletAddress } from "../ton/tonWallet.ts";
-import { SupabaseUser } from "../users/data/types.ts";
+import { UserData } from "../types/index.ts";
 import { generatePromoCode } from "../users/data/wordlist.ts";
 
 export enum GaType {
@@ -71,28 +71,28 @@ interface MpBody {
 }
 
 
-const clientId = (user: SupabaseUser) => {
+const clientId = (user: UserData) => {
   return `${1600000000 + user.telegram_id}.${1600000000 + Math.floor(user.telegram_id * 0.29315743)}`;
 }
 
-const userLocation = (user: SupabaseUser): GaLocation => {
+const userLocation = (user: UserData): GaLocation => {
   return {
-    city: user.city,
-    region_id: user.region_id,
-    country_id: user.country_id,
+    city: user.city || '',
+    region_id: user.region_id || '',
+    country_id: user.country_id || '',
   }
 }
 
-const deviceInfo = (user: SupabaseUser): GaDevice => {
+const deviceInfo = (user: UserData): GaDevice => {
   return {
-    category: user.category,
-    screen_resolution: user.screen_resolution,
-    operating_system: user.operating_system,
-    browser: user.browser,
+    category: user.category || 'mobile',
+    screen_resolution: user.screen_resolution || '360x780',
+    operating_system: user.operating_system || 'Android',
+    browser: user.browser || 'Chrome',
   }
 }
 
-async function createCreationGA(user: SupabaseUser, now: number): Promise<MpEvent[]> {
+async function createCreationGA(user: UserData, now: number): Promise<MpEvent[]> {
   const session_id = now.toString()
   const wallet = await getWalletAddress(user.wallet_id, user.referral_group);
   return [
@@ -115,7 +115,7 @@ async function createCreationGA(user: SupabaseUser, now: number): Promise<MpEven
     ]
 }
 
-function createSessionPageGa(user: SupabaseUser, now: number): MpBody {
+function createSessionPageGa(user: UserData, now: number): MpBody {
   const session_id = now.toString()
   const eventList: string[] = ['home', 'play', 'home', 'play', 'home', 'play', 'home', 'play', 'airdrop', 'quests', 'airdrop']
   if (Math.random() < 0.5) {
@@ -155,7 +155,7 @@ function createSessionPageGa(user: SupabaseUser, now: number): MpBody {
   }
 }
 
-function getEventPlayParams(event: EventName, session_id: string, user: SupabaseUser): MpEventParams & Record<string, string | number | undefined> {
+function getEventPlayParams(event: EventName, session_id: string, user: UserData): MpEventParams & Record<string, string | number | undefined> {
   const params = {
     session_id,
         engagement_time_msec: Math.floor(event === EventName.login ? Math.random() * 1000 + 100
@@ -167,7 +167,8 @@ function getEventPlayParams(event: EventName, session_id: string, user: Supabase
   switch (event) {
     case EventName.gameResults:
       {
-        const multiplier = user.user_level < 6 ? user.user_level + 1 : user.user_level < 9 ? user.user_level * 2 - 4 : user.user_level === 9 ? 15 : 20;
+        const level = user.user_level || 0;
+        const multiplier = level < 6 ? level + 1 : level < 9 ? level * 2 - 4 : level === 9 ? 15 : 20;
         const isPoints = Math.random() < 0.7;
         return {
           ...params,
@@ -175,8 +176,8 @@ function getEventPlayParams(event: EventName, session_id: string, user: Supabase
           reel_1: Math.floor(Math.random() * 27),
           reel_2: Math.floor(Math.random() * 27),
           multiplier: multiplier,
-          level: user.user_level,
-          response_level: user.user_level,
+          level: level,
+          response_level: level,
           points: isPoints ? Math.floor(Math.random() * 500 + 100) * 1000 * multiplier : 0,
           tokens: !isPoints ? Math.floor(Math.random() * 20 + 10) * 50 : 0,
           energy: 0,
@@ -190,7 +191,7 @@ function getEventPlayParams(event: EventName, session_id: string, user: Supabase
   }
 }
 
-function createSessionPlayGa(user: SupabaseUser, now: number): MpBody {
+function createSessionPlayGa(user: UserData, now: number): MpBody {
   const session_id = now.toString()
 
   /* 
@@ -255,7 +256,7 @@ async function sendGa(mpBody: MpBody, desc: string) {
   }
 }
 
-export async function sendGaForUser(user: SupabaseUser, isFirstSignup: boolean) {
+export async function sendGaForUser(user: UserData, isFirstSignup: boolean) {
   const now = Date.now()
 
   const sessionPlayGa = createSessionPlayGa(user, now);
@@ -276,7 +277,7 @@ export async function sendGaForUser(user: SupabaseUser, isFirstSignup: boolean) 
 // deno run --allow-all --env-file supabase/functions/dig-spoof-ga/sendGa.ts
 
 async function sendBogusGa() {
-  const user: SupabaseUser = testSupabaseUser();
+  const user = testUserData();
   const session_id = Date.now().toString()
   const mpBody: MpBody = {
     client_id: clientId(user),

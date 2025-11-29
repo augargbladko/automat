@@ -3,8 +3,8 @@
 // This enables autocomplete, go to definition, etc.
 
 import { secureConnectToSupabase } from "../queries/database/supabase.ts";
-import { storeUsers } from "../queries/database/users.ts";
-import { Tables, UserUpsert } from "../types/index.ts";
+import { Tables } from "../types/index.ts";
+import { createUser } from "../users/createUser.ts";
 import { UserStatus } from "../users/data/types.ts";
 import { denoServe, handleCORS } from "../utils/index.ts";
 
@@ -82,49 +82,41 @@ export function getUsersToAdd(): { realAdd: number, fakeAdd: number } {
   return usersToAdd;
 }
 
+const isTest = true;
 
+// this cron runs every 10 minutes.
 denoServe(
   handleCORS(async () => {
+    console.log("Dig add users called");
     const supabase = secureConnectToSupabase()
 
     // figure out the correct number of users to add in this 10min block.
     const { realAdd, fakeAdd } = getUsersToAdd();
 
-    const realUsers = await supabase.from(Tables.user_data).select('*')
+    const realUsers = (await supabase.from(Tables.user_data).select('*')
       .neq('referral_group', 0)
+      .eq('user_status', UserStatus.none)
       .order('referral_group', { ascending: true })
       .order('referral_pos', { ascending: true })
-      .limit(realAdd)
+      .limit(realAdd))?.data || []
     
-    const fakeUsers = await supabase.from(Tables.user_data).select('*')
+    const fakeUsers = (await supabase.from(Tables.user_data).select('*')
       .eq('referral_group', 0)
+      .eq('user_status', UserStatus.none)
       .order('referral_pos', { ascending: true })
-      .limit(fakeAdd)
-    
-    
-    
-    // it's ok to "add" a user twice, we don't hit any errors.
-    const userUpsert: UserUpsert[] = realUsers.data?.map((user) => { return { telegram_id: user.telegram_id, user_status: UserStatus.created }; }) || [];
-    await storeUsers(supabase, userUpsert);
+      .limit(fakeAdd))?.data || []
+        
+    if (isTest) {
+      console.log("Test mode, not adding users.");
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { "Content-Type": "application/json" },
+      })
+    }
 
-
-
-    // call createUser for the users that have been brought in from  Supabase.
-
-    // this cron runs 1/hour, and adds 24k users in 30 days, starting with 150.
-
-
-    // we're going to add 240 regular users per day, plus 120 of our highly active users.
-    // by the end of Dec, we'll need 6,000 temp users, and ~1k actives.
-
-    // 50% will have wallets (all based on a dead seed phrase)
-    // 20% will have emails (unverified)
-    // 5% will have verified emails
-    // we'll run 3 sessions worth of activity for each user.
-
-    // get the next N users who need to be added from the users table
-
-    // pull the users, run the add users function in parallel
+    const realResults = await Promise.all(realUsers.map((user) => { createUser(supabase, user); }));
+    console.log("Real user creation results:", realResults);
+    const fakeResults = await Promise.all(fakeUsers.map((user) => { createUser(supabase, user); }));
+    console.log("Fake user creation results:", fakeResults);
 
     // ensure the one-time GA stuff gets run
       return new Response(JSON.stringify({ success: true }), {
@@ -132,10 +124,6 @@ denoServe(
       })
   })
 )
-
-const perDayInDec = [
-  120,
-]
 
 /* To invoke locally:
 

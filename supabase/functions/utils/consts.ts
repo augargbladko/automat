@@ -17,12 +17,12 @@ export function convertDateToDayString(date: Date): string {
     .padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
 }
 
-export function getUserDayString(date: Date, timeZone: string): string {
+export function getUserDayString(date: Date, timeZone: string | null): string {
   // Convert the current UTC time to the user's local time
   let userLocalTime: Date;
   try {
     userLocalTime = new Date(
-      date.toLocaleString('en-US', { timeZone: timeZone }),
+      date.toLocaleString('en-US', { timeZone: timeZone || undefined }),
     );
   } catch (error) {
     console.error(

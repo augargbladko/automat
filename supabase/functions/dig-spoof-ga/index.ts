@@ -11,10 +11,10 @@ import { denoServe, handleCORS } from "../utils/index.ts";
 denoServe(
   handleCORS(async (req: Request) => {
     const group = await req.json()
+    console.log("Dig spoof GA called with group:", group);
     const supabase = secureConnectToSupabase()
 
     // we need valid-looking GA data for users
-
 
 
     return new Response(JSON.stringify({ success: true }), {

@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { SupabaseUser } from "./types.ts";
+import { UserData } from "../../types/index.ts";
 
 interface ValidatedData {
   [key: string]: string;
@@ -19,7 +19,7 @@ interface ValidationResult {
   message: string;
 }
 
-export function getTelegramUser(user: SupabaseUser): TelegramUser {
+export function getTelegramUser(user: UserData): TelegramUser {
   return {
     id: user.telegram_id.toString(),
     username: user.username || undefined,
@@ -28,7 +28,7 @@ export function getTelegramUser(user: SupabaseUser): TelegramUser {
   };
 }
 
-export function createTelegramInitData(user: SupabaseUser): string {
+export function createTelegramInitData(user: UserData): string {
   const tgUser = getTelegramUser(user);
   const BOT_TOKEN = Deno.env.get('BOT_TOKEN') || '';
   const initData = new URLSearchParams();
