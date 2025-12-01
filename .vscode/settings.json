@@ -1,5 +1,5 @@
 {
-  "[typescript]": { "editor.defaultFormatter": "denoland.vscode-deno" },
+  "editor.defaultFormatter": "denoland.vscode-deno",
   "deno.cache": ".cache",
   "deno.config": "./supabase/deno.json",
   "deno.enable": true,
@@ -18,5 +18,9 @@
       "user.email": "augargbladko@gmail.com",
       "user.name": "augargbladko"
     }
-  ]
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": "explicit"
+  }
 }

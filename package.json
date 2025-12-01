@@ -4,7 +4,7 @@
     "lint": "next lint",
     "format": "prettier --ignore-path .gitignore --write .",
     "dev": "next dev",
-    "gen-types": "supabase db reset && supabase gen types typescript --local --schema=public > supabase/functions/types/supabase.ts",
+    "reset": "supabase db reset && supabase gen types typescript --local --schema=public > supabase/functions/types/supabase.ts",
     "build": "next build",
     "start": "next start",
     "test-build": "__NEXT_TEST_MODE=1 next build"

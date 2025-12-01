@@ -19,6 +19,7 @@ export type Database = {
           email: string | null
           first_name: string | null
           is_premium: boolean | null
+          next_action_time: number | null
           operating_system: string | null
           referral_group: number | null
           referral_pos: number | null
@@ -46,6 +47,7 @@ export type Database = {
           email?: string | null
           first_name?: string | null
           is_premium?: boolean | null
+          next_action_time?: number | null
           operating_system?: string | null
           referral_group?: number | null
           referral_pos?: number | null
@@ -73,6 +75,7 @@ export type Database = {
           email?: string | null
           first_name?: string | null
           is_premium?: boolean | null
+          next_action_time?: number | null
           operating_system?: string | null
           referral_group?: number | null
           referral_pos?: number | null

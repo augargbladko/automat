@@ -1,7 +1,7 @@
 ALTER TABLE user_data
 ADD COLUMN next_action_time integer;
 
-CREATE INDEX ON user_data (referral_group);
+CREATE INDEX ON user_data (next_action_time);
 
 
 select
