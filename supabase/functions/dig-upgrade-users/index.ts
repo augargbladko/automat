@@ -2,19 +2,12 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-import { secureConnectToSupabase } from "../queries/database/supabase.ts";
-import { testClient } from "../queries/telegram/testClient.ts";
-import { denoServe, handleCORS } from "../utils/index.ts";
-
-// Setup type definitions for built-in Supabase Runtime APIs
-/// <reference types="https://esm.sh/@supabase/functions-js/src/edge-runtime.d.ts" />
+import { denoServe, handleCORS } from "../utils/index.ts"
 
 denoServe(
   handleCORS(async (req: Request) => {
-    console.log("Dig upgrade users called");
+    console.log("Dig upgrade users called")
 
-    const supabase = secureConnectToSupabase()
-    const client = await testClient();
     return new Response(JSON.stringify({ success: true }), {
       headers: { "Content-Type": "application/json" },
     })
@@ -26,7 +19,7 @@ denoServe(
   1. Run `supabase start` (see: https://supabase.com/docs/reference/cli/supabase-start)
   2. Make an HTTP request:
 
-  curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/ingest-telegram-users' \
+  curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/dig-upgrade-users' \
     --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
     --header 'Content-Type: application/json' \
     --data '{"channel":"bibleverses" }'
@@ -36,8 +29,6 @@ denoServe(
 /* To invoke from another Supabase Function:
 
     const supabase = await connectToSupabase(req)
-    const response = await supabase.functions.invoke('ingest-telegram-users', {
-      body: { channel: 'bibleverses' },
-    })
+    const response = await supabase.functions.invoke('dig-upgrade-users')
 
 */

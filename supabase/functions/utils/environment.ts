@@ -1,3 +1,5 @@
+/// <reference lib="deno.ns" />
+
 export declare const Deno: {
   env: { get: (key: string) => string | undefined }
   serve: any

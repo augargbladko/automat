@@ -21,6 +21,7 @@ export type Database = {
           is_premium: boolean | null
           next_action_time: number | null
           operating_system: string | null
+          photo_url: string | null
           referral_group: number | null
           referral_pos: number | null
           referred_by_id: number | null
@@ -49,6 +50,7 @@ export type Database = {
           is_premium?: boolean | null
           next_action_time?: number | null
           operating_system?: string | null
+          photo_url?: string | null
           referral_group?: number | null
           referral_pos?: number | null
           referred_by_id?: number | null
@@ -77,6 +79,7 @@ export type Database = {
           is_premium?: boolean | null
           next_action_time?: number | null
           operating_system?: string | null
+          photo_url?: string | null
           referral_group?: number | null
           referral_pos?: number | null
           referred_by_id?: number | null

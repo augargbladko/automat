@@ -1,3 +1,5 @@
+/// <reference lib="deno.ns" />
+
 import { mnemonicNew } from "@ton/crypto"
 import { internal, TonClient, WalletContractV4 } from "@ton/ton"
 import { UserData } from "../types/index.ts"
@@ -41,6 +43,7 @@ export function testUserData(): UserData {
     treasure: 2,
     wallet_id: 12,
     wallet_address: "",
+    photo_url: "",
     user_status: UserStatus.none,
     user_error: "",
     operating_system: "Android",
