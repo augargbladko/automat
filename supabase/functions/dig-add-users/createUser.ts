@@ -47,9 +47,6 @@ export async function createUser(
       next_action_time: getNextActionTime(user),
     })
 
-    if (isTestCreate) {
-      return user.telegram_id
-    }
     // run some fake slots plays for the user, so their data looks more realistic
     await playSlotsUntilEnergyRunsOut(user)
 
@@ -67,13 +64,10 @@ async function newUserCreate(user: UserData): Promise<boolean> {
   const telegramInitData = createTelegramInitData(user)
   const userBody = {
     telegramInitData: telegramInitData,
-    referrerTelegramId: user.referred_by_id,
+    referrerTelegramId: user.referred_by_id?.toString(),
     timeZone: user.time_zone,
   }
-  if (isTestCreate) {
-    console.log("test create user", userBody)
-    return true
-  }
+
   const createUserResponse = await fetch(BASE_ROUTE + API_ROUTES.user, {
     method: "POST",
     headers: {
@@ -97,11 +91,6 @@ async function newUserAddWallet(user: UserData): Promise<boolean> {
   const walletRequest = {
     telegramInitData: telegramInitData,
     tonWalletAddress: user.wallet_address,
-  }
-
-  if (isTestCreate) {
-    console.log(`test add wallet`, user.telegram_id, walletRequest)
-    return true
   }
 
   const addWalletResponse = await fetch(BASE_ROUTE + API_ROUTES.wallet, {
@@ -130,11 +119,6 @@ async function newUserConfirmEmail(user: UserData): Promise<boolean> {
   const addEmailRequest = {
     telegramInitData: telegramInitData,
     email: user.email,
-  }
-
-  if (isTestCreate) {
-    console.log("test confirm email", user.telegram_id, addEmailRequest)
-    return true
   }
 
   const addEmailResponse = await fetch(BASE_ROUTE + API_ROUTES.emailEntry, {

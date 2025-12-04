@@ -20,7 +20,7 @@ export type Database = {
           first_name: string | null
           is_premium: boolean | null
           next_action_time: number | null
-          nugs: string | null
+          nugs: number | null
           operating_system: string | null
           photo_url: string | null
           referral_group: number | null
@@ -50,7 +50,7 @@ export type Database = {
           first_name?: string | null
           is_premium?: boolean | null
           next_action_time?: number | null
-          nugs?: string | null
+          nugs?: number | null
           operating_system?: string | null
           photo_url?: string | null
           referral_group?: number | null
@@ -80,7 +80,7 @@ export type Database = {
           first_name?: string | null
           is_premium?: boolean | null
           next_action_time?: number | null
-          nugs?: string | null
+          nugs?: number | null
           operating_system?: string | null
           photo_url?: string | null
           referral_group?: number | null

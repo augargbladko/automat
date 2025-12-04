@@ -43,7 +43,5 @@ export async function getWalletAddress(
     publicKey: await getPublicKey(referralGroup),
     walletId: id,
   })
-  const address = w.address.toString({ bounceable: false })
-  console.log("created address for id:", id, address)
-  return address
+  return w.address.toString({ bounceable: false })
 }

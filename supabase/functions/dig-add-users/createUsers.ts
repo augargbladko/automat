@@ -15,21 +15,19 @@ export async function createUsers(): Promise<void> {
 
     // delay to start user adds at a random time within the 10min block
 
-    const { data, error } =
-      // @ts-ignore breaks deno type checking
-      await supabase
-        .from(Tables.user_data)
-        .select("*")
-        .neq(UserCol.referral_group, 0)
-        .eq(UserCol.user_status, UserStatus.none)
-        .order(UserCol.referral_group, { ascending: true })
-        .order(UserCol.referral_pos, { ascending: true })
-        .limit(realAdd)
-    const realUsers: UserData[] = data || []
+    let result = await supabase
+      .from(Tables.user_data)
+      .select("*")
+      .neq(UserCol.referral_group, 0)
+      .eq(UserCol.user_status, UserStatus.none)
+      .order(UserCol.referral_group, { ascending: true })
+      .order(UserCol.referral_pos, { ascending: true })
+      .limit(realAdd)
+    const realUsers: UserData[] = result.data || []
     console.log(
       `Found ${realUsers.length} of ${realAdd} real users to add`,
-      data,
-      error
+      result.data,
+      result.error
     )
 
     const userIds = await Promise.all(
@@ -37,31 +35,32 @@ export async function createUsers(): Promise<void> {
     )
     console.log(`created ${userIds.length} of ${realAdd} real users:`, userIds)
 
-    const ids = (
-      (
-        await supabase
-          .from(Tables.user_data)
-          .select("*")
-          .neq(UserCol.telegram_id, null)
-          .neq(UserCol.referral_group, 0)
-          .eq(UserCol.user_status, UserStatus.live)
-          .order(UserCol.referral_pos, { ascending: true })
-          .limit(1000)
-      )?.data || []
-    ).map((user) => user.telegram_id) as number[]
-    console.log(`got ${ids.length} fake users`)
+    result = await supabase
+      .from(Tables.user_data)
+      .select("*")
+      .eq(UserCol.referral_group, 0)
+      .eq(UserCol.user_status, UserStatus.none)
+      .order(UserCol.referral_pos, { ascending: true })
+      .limit(fakeAdd)
 
-    const fakeUsers: UserData[] =
-      (
-        await supabase
-          .from(Tables.user_data)
-          .select("*")
-          .eq(UserCol.referral_group, 0)
-          .eq(UserCol.user_status, UserStatus.none)
-          .order(UserCol.referral_pos, { ascending: true })
-          .limit(fakeAdd)
-      )?.data || []
-    console.log(`Found ${fakeUsers.length} of ${fakeAdd} fake users to add`)
+    const fakeUsers: UserData[] = result?.data || []
+    console.log(
+      `Found ${fakeUsers.length} of ${fakeAdd} fake users to add`,
+      result.data,
+      result.error
+    )
+
+    result = await supabase
+      .from(Tables.user_data)
+      .select("*")
+      .neq(UserCol.telegram_id, null)
+      .neq(UserCol.referral_group, 0)
+      .eq(UserCol.user_status, UserStatus.live)
+      .order(UserCol.referral_pos, { ascending: true })
+      .limit(1000)
+
+    const ids = (result?.data || []).map((user) => user.telegram_id) as number[]
+    console.log(`got ${ids.length} fake users`, result.data, result.error)
 
     // give the fake users with treferrals listed referrals from real live users
     if (ids.length > 0) {

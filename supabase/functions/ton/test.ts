@@ -41,6 +41,7 @@ export function testUserData(): UserData {
     referral_group: 1,
     referral_pos: 1,
     treasure: 2,
+    nugs: 0,
     wallet_id: 12,
     wallet_address: "",
     photo_url: "",

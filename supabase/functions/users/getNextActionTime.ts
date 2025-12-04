@@ -11,8 +11,5 @@ export function getNextActionTime(user: UserData): number {
               : (6 + Math.random()) * 4 * 60 * 60) // fakes 1 per 24-28 hours
         )
       : 2_147_483_647
-  console.log(
-    `Next action time for user ${user.telegram_id} set to ${new Date(nextActionTime * 1000).toISOString()} at ${new Date().toISOString()}`
-  )
   return nextActionTime
 }

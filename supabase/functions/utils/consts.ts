@@ -1,7 +1,7 @@
 export const BASE_ROUTE = "https://dig-it-gold.vercel.app"
 export const API_ROUTES = {
   user: "/api/user", // { telegramInitData, referrerTelegramId, tonWalletAddress, timeZone }
-  wallet: "api/user/wallet", // { telegramInitData, tonWalletAddress }
+  wallet: "/api/user/wallet", // { telegramInitData, tonWalletAddress }
   emailEntry: "/api/user/email/entry", // { telegramInitData, email }
   emailConfirm: "/api/user/email/confirm", // { email, telegramId } << email must be entered as requested // const authToken = req.headers.get('Authorization'); if (!authToken || authToken !== process.env.KLAYVIO_AUTHORIZATION) {
   purchaseTokens: "/api/verify-and-purchase-tokens", // { telegramInitData, packageId }

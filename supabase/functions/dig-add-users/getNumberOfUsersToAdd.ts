@@ -30,6 +30,9 @@ function modifyUserAdd(base: number): number {
     oneChance = 0.2
   }
   const chance = Math.random()
+  console.log(
+    `base: ${base} chance:${chance}, 1:${oneChance}, 2:${twoChance}, 3:${threeChance}`
+  )
   if (chance < oneChance) {
     base += 1
   } else if (chance < twoChance) {
@@ -67,13 +70,28 @@ export function getNumberOfUsersToAdd(): { realAdd: number; fakeAdd: number } {
   }
 
   const adjustmentFactor = Math.max(0, now.getUTCHours() - 16) / 8
+  console.log(
+    `get number of users to add. Today: ${JSON.stringify(today)}, tomorrow: ${JSON.stringify(tomorrow)}, adjustment: ${adjustmentFactor}`
+  )
 
   const usersToAdd = {
-    realAdd: modifyUserAdd(
-      today.real + Math.round((tomorrow.real - today.real) * adjustmentFactor)
+    realAdd: Math.floor(
+      modifyUserAdd(
+        Math.max(
+          0,
+          today.real +
+            (tomorrow.real - today.real) * adjustmentFactor * Math.random() * 2
+        )
+      )
     ),
-    fakeAdd: modifyUserAdd(
-      today.fake + Math.round((tomorrow.fake - today.fake) * adjustmentFactor)
+    fakeAdd: Math.floor(
+      modifyUserAdd(
+        Math.max(
+          0,
+          today.fake +
+            (tomorrow.fake - today.fake) * adjustmentFactor * Math.random() * 2
+        )
+      )
     ),
   }
   console.log(

@@ -25,7 +25,6 @@ denoServe(
     }
     await createUsers()
 
-    // ensure the one-time GA stuff gets run
     return new Response(JSON.stringify({ success: true }), {
       headers: { "Content-Type": "application/json" },
     })

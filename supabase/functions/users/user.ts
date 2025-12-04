@@ -75,7 +75,7 @@ export async function getUser(user: UserData): Promise<MongoUser> {
   const telegramInitData = createTelegramInitData(user)
   const userBody = {
     telegramInitData: telegramInitData,
-    referrerTelegramId: user.referred_by_id,
+    referrerTelegramId: user.referred_by_id?.toString(),
     timeZone: user.time_zone,
   }
   const createUserResponse = await fetch(BASE_ROUTE + API_ROUTES.user, {
