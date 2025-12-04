@@ -3,6 +3,8 @@
 import { Db, MongoClient } from "mongodb"
 import { secureConnectToSupabase } from "../queries/database/supaFunc.ts"
 import { storeUsers } from "../queries/database/users.ts"
+import { UserData } from "../types/index.ts"
+import { subscribeProfileToList } from "../users/klaviyo.ts"
 
 // deno run --allow-all --env-file supabase/functions/mongodb/mongo.ts
 
@@ -79,6 +81,15 @@ async function UploadPhotos() {
     await storeUsers(supabase, lines.slice(i, i + 1000))
     console.log("Uploaded photos for users", i, "to", i + 1000)
   }
+  Deno.exit()
+}
+
+async function TestKlaviyo() {
+  const result = await subscribeProfileToList({
+    email: "strap@headline.org",
+    telegram_id: 123456789,
+  } as unknown as UserData)
+  console.log("klaviyo result", result)
   Deno.exit()
 }
 

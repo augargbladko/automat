@@ -146,13 +146,10 @@ export async function newUserConfirmEmail(user: UserData): Promise<boolean> {
   await delay(2000)
 
   // Klaviyo API call to confirm email
-  if (!(await subscribeProfileToList(user))) {
-    console.log("Klaviyo subscribe failed for user", user.telegram_id)
-    return false
-  }
+  await subscribeProfileToList(user)
   await delay(5000)
 
-  // api call to confirm email
+  // api call to confirm email - try even if the klaviyo call failed
   const confirmEmailRequest = {
     email: user.email,
     telegramId: user.telegram_id,

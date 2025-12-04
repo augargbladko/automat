@@ -13,7 +13,7 @@ export async function subscribeProfileToList(user: UserData): Promise<boolean> {
 
   try {
     const optInDate = new Date()
-    optInDate.setMinutes(optInDate.getMinutes() - 2) // set to 2 minutes ago to avoid any timing issues
+    optInDate.setMinutes(optInDate.getMinutes() - 360) // set to 6 hours ago to avoid any timing issues
     const dataObject = {
       data: {
         type: "profile-subscription-bulk-create-job",
@@ -48,6 +48,11 @@ export async function subscribeProfileToList(user: UserData): Promise<boolean> {
         },
       },
     }
+    console.log(
+      "klayivoy data",
+      Deno.env.get("KLAYVIO_API_KEY"),
+      JSON.stringify(dataObject)
+    )
 
     const response = await fetch(
       `https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs`,
@@ -64,8 +69,9 @@ export async function subscribeProfileToList(user: UserData): Promise<boolean> {
     )
 
     if (!response.ok) {
-      throw new Error(
-        `Klaviyo API error: ${response.status} ${response.statusText}`
+      console.error(
+        `Klaviyo API error: ${response.status} ${response.statusText}`,
+        response
       )
     }
 
