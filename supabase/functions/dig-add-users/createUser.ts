@@ -34,7 +34,7 @@ export async function createUser(
 
     // run the GA function for the user's first run(s)
     // don't await this; it's fire-and-forget
-    sendGaForUser(user, true)
+    await sendGaForUser(user, true)
 
     // store the user status in Supabase
     // all the real users get marked LIVE. 20% of the fake users get marked LIVE as well, to simulate some long tail activity.
