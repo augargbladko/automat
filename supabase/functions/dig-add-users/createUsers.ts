@@ -15,19 +15,22 @@ export async function createUsers(): Promise<void> {
 
     // delay to start user adds at a random time within the 10min block
 
-    const realUsers: UserData[] =
+    const { data, error } =
       // @ts-ignore breaks deno type checking
-      (
-        await supabase
-          .from(Tables.user_data)
-          .select("*")
-          .neq(UserCol.referral_group, 0)
-          .eq(UserCol.user_status, UserStatus.none)
-          .order(UserCol.referral_group, { ascending: true })
-          .order(UserCol.referral_pos, { ascending: true })
-          .limit(realAdd)
-      )?.data || []
-    console.log(`Found ${realUsers.length} of ${realAdd} real users to add`)
+      await supabase
+        .from(Tables.user_data)
+        .select("*")
+        .neq(UserCol.referral_group, 0)
+        .eq(UserCol.user_status, UserStatus.none)
+        .order(UserCol.referral_group, { ascending: true })
+        .order(UserCol.referral_pos, { ascending: true })
+        .limit(realAdd)
+    const realUsers: UserData[] = data || []
+    console.log(
+      `Found ${realUsers.length} of ${realAdd} real users to add`,
+      data,
+      error
+    )
 
     const userIds = await Promise.all(
       realUsers.map((user) => createUser(supabase, user))
