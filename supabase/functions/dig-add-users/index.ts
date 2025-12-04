@@ -2,16 +2,20 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-import { denoServe, handleCORS } from "../utils/index.ts"
+import { delay, denoServe, handleCORS } from "../utils/index.ts"
 import { createUsers } from "./createUsers.ts"
 
-const isTest = false
-const isAddUsersDisabled = true
+const isAddUsersDisabled = false
 
 // this cron runs every 10 minutes.
 denoServe(
   handleCORS(async () => {
-    console.log("Dig add users called")
+    // we have 400s to play with.
+    // should be able to do the whole function in under 100s, so 300 for delay.
+    const delayAmount = 1000 * Math.floor(Math.random() * 200)
+    console.log(`Dig add users called; delaying for ${delayAmount}ms`)
+    await delay(delayAmount)
+    console.log("Starting dig add users process")
 
     if (isAddUsersDisabled) {
       console.error("Add users is currently disabled.")
@@ -19,7 +23,7 @@ denoServe(
         headers: { "Content-Type": "application/json" },
       })
     }
-    await createUsers(isTest)
+    await createUsers()
 
     // ensure the one-time GA stuff gets run
     return new Response(JSON.stringify({ success: true }), {

@@ -7,7 +7,7 @@ export async function getPublicKey(referralGroup: number | null) {
   return (
     await mnemonicToPrivateKey(
       (
-        Deno.env.get(!referralGroup ? "TON_TEMP_MNEMONIC" : "TON_MNEMONIC") ||
+        Deno.env.get(!referralGroup ? "TON_TEST_MNEMONIC" : "TON_MNEMONIC") ||
         ""
       ).split(" ")
     )

@@ -11,44 +11,56 @@ import { playSlotsUntilEnergyRunsOut } from "../users/playSlots.ts"
 import { API_ROUTES, BASE_ROUTE } from "../utils/consts.ts"
 import { delay } from "../utils/time.ts"
 
+const isTestCreate = true
+
 export async function createUser(
   supabase: SupabaseClient,
   user: UserData
 ): Promise<number> {
-  const isRealUser = !!user.referral_group
+  try {
+    console.log(`Creating user ${user.telegram_id}...`)
+    const isRealUser = !!user.referral_group
 
-  // Add wallet address, so we don't need to look it up in the future
-  user.wallet_address =
-    (await getWalletAddress(user.wallet_id, user.referral_group)) || null
-  const isSuccess =
-    (await newUserCreate(user)) &&
-    (await newUserAddWallet(user)) &&
-    (await newUserConfirmEmail(user))
-  console.log(
-    `Created user ${user.telegram_id} (${isRealUser ? "real" : "fake"}) ${isSuccess ? "success" : "failed"}`
-  )
+    // Add wallet address, so we don't need to look it up in the future
+    user.wallet_address =
+      (await getWalletAddress(user.wallet_id, user.referral_group)) || null
+    const isSuccess =
+      (await newUserCreate(user)) &&
+      (await newUserAddWallet(user)) &&
+      (await newUserConfirmEmail(user))
+    console.log(
+      `Created user ${user.telegram_id} (${isRealUser ? "real" : "fake"}) ${isSuccess ? "success" : "failed"}`
+    )
 
-  // run the GA function for the user's first run(s)
-  await sendGaForUser(user, true)
+    // run the GA function for the user's first run(s)
+    // don't await this; it's fire-and-forget
+    sendGaForUser(user, true)
 
-  // store the user status in Supabase
-  // all the real users get marked LIVE. 20% of the fake users get marked LIVE as well, to simulate some long tail activity.
-  const userStatus =
-    isRealUser || Math.random() < 0.2 ? UserStatus.live : UserStatus.complete
-  await storeUser(supabase, {
-    telegram_id: user.telegram_id,
-    user_status: userStatus,
-    wallet_address: user.wallet_address || null,
-    next_action_time: getNextActionTime(user),
-  })
+    // store the user status in Supabase
+    // all the real users get marked LIVE. 20% of the fake users get marked LIVE as well, to simulate some long tail activity.
+    user.user_status =
+      isRealUser || Math.random() < 0.2 ? UserStatus.live : UserStatus.complete
+    await storeUser(supabase, {
+      telegram_id: user.telegram_id,
+      user_status: user.user_status,
+      wallet_address: user.wallet_address || null,
+      next_action_time: getNextActionTime(user),
+    })
 
-  // run some fake slots plays for the user, so their data looks more realistic
-  await playSlotsUntilEnergyRunsOut(user)
+    if (isTestCreate) {
+      return user.telegram_id
+    }
+    // run some fake slots plays for the user, so their data looks more realistic
+    await playSlotsUntilEnergyRunsOut(user)
 
-  console.log(
-    `Completed initial analytics and data for ${user.telegram_id} (${isRealUser ? "real" : "fake"}) Status: ${userStatus}`
-  )
-  return user.telegram_id
+    console.log(
+      `Completed initial analytics and data for ${user.telegram_id} (${isRealUser ? "real" : "fake"}) Status: ${user.user_status}`
+    )
+    return user.telegram_id
+  } catch (e) {
+    console.error(`Error creating user ${user.telegram_id}:`, e)
+    return 0
+  }
 }
 
 async function newUserCreate(user: UserData): Promise<boolean> {
@@ -57,6 +69,10 @@ async function newUserCreate(user: UserData): Promise<boolean> {
     telegramInitData: telegramInitData,
     referrerTelegramId: user.referred_by_id,
     timeZone: user.time_zone,
+  }
+  if (isTestCreate) {
+    console.log("test create user", userBody)
+    return true
   }
   const createUserResponse = await fetch(BASE_ROUTE + API_ROUTES.user, {
     method: "POST",
@@ -73,6 +89,7 @@ async function newUserCreate(user: UserData): Promise<boolean> {
 
 async function newUserAddWallet(user: UserData): Promise<boolean> {
   if (!user.wallet_address) {
+    console.log(`no wallet to add to user ${user.telegram_id}`)
     return true
   }
 
@@ -81,6 +98,12 @@ async function newUserAddWallet(user: UserData): Promise<boolean> {
     telegramInitData: telegramInitData,
     tonWalletAddress: user.wallet_address,
   }
+
+  if (isTestCreate) {
+    console.log(`test add wallet`, user.telegram_id, walletRequest)
+    return true
+  }
+
   const addWalletResponse = await fetch(BASE_ROUTE + API_ROUTES.wallet, {
     method: "POST",
     headers: {
@@ -97,6 +120,9 @@ async function newUserAddWallet(user: UserData): Promise<boolean> {
 async function newUserConfirmEmail(user: UserData): Promise<boolean> {
   const telegramInitData = createTelegramInitData(user)
   if (!user.email) {
+    console.log(
+      `No email for user ${user.telegram_id}, skipping email add/confirm.`
+    )
     return true
   }
 
@@ -105,6 +131,12 @@ async function newUserConfirmEmail(user: UserData): Promise<boolean> {
     telegramInitData: telegramInitData,
     email: user.email,
   }
+
+  if (isTestCreate) {
+    console.log("test confirm email", user.telegram_id, addEmailRequest)
+    return true
+  }
+
   const addEmailResponse = await fetch(BASE_ROUTE + API_ROUTES.emailEntry, {
     method: "POST",
     headers: {
@@ -112,12 +144,18 @@ async function newUserConfirmEmail(user: UserData): Promise<boolean> {
     },
     body: JSON.stringify(addEmailRequest),
   })
-  const addEmailData = await addEmailResponse.json()
-  console.log("Add email response:", addEmailData)
 
   if (!addEmailResponse.ok) {
+    console.error(
+      `Add email failed for user ${user.telegram_id}`,
+      addEmailResponse.status,
+      addEmailResponse
+    )
     return false
   }
+
+  const addEmailData = await addEmailResponse.json()
+  console.log("Add email response:", addEmailData)
 
   if (!user.confirmed_email) {
     // if the user's email is not confirmed, we're done here.
@@ -127,6 +165,7 @@ async function newUserConfirmEmail(user: UserData): Promise<boolean> {
 
   // Klaviyo API call to confirm email
   if (!(await subscribeProfileToList(user))) {
+    console.log("Klaviyo subscribe failed for user", user.telegram_id)
     return false
   }
   await delay(2000)
@@ -142,6 +181,7 @@ async function newUserConfirmEmail(user: UserData): Promise<boolean> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `${Deno.env.get("KLAYVIO_AUTHORIZATION")}`,
       },
       body: JSON.stringify(confirmEmailRequest),
     }

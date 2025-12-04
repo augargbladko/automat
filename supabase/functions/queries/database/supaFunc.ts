@@ -32,18 +32,18 @@ export function connectToSupabase(req: Request): SupabaseClient {
   return supabaseClient
 }
 
-export async function supabaseStoreDataPoint(
+export async function supabaseStoreDataPoint<T>(
   supabase: SupabaseClient,
-  dataPoint: any,
+  dataPoint: T,
   tableName: Tables
 ): Promise<boolean> {
-  const result = await supabaseStoreArray(supabase, [dataPoint], tableName)
+  const result = await supabaseStoreArray<T>(supabase, [dataPoint], tableName)
   return result
 }
 
-export async function supabaseStoreArray(
+export async function supabaseStoreArray<T>(
   supabase: SupabaseClient,
-  dataToStore: any[],
+  dataToStore: T[],
   tableName: Tables
 ): Promise<boolean> {
   let isSuccess = true
@@ -100,9 +100,9 @@ export async function supabaseStoreArray(
   return isSuccess
 }
 
-export async function supabaseInsertArray(
+export async function supabaseInsertArray<T>(
   supabase: SupabaseClient,
-  dataToStore: any[],
+  dataToStore: T[],
   tableName: Tables
 ): Promise<boolean> {
   let isSuccess = true
@@ -139,9 +139,9 @@ export async function supabaseInsertArray(
   return isSuccess
 }
 
-export async function supabaseUpdateDataPoint(
+export async function supabaseUpdateDataPoint<T extends Record<string, any>>(
   supabase: SupabaseClient,
-  dataToStore: any,
+  dataToStore: T,
   tableName: Tables
 ): Promise<boolean> {
   let isSuccess = true

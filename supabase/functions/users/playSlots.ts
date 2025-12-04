@@ -1,44 +1,60 @@
-import { UserData } from "../types/index.ts";
-import { createTelegramInitData } from "../users/data/telegramInitData.ts";
-import { SlotsPlayState } from "../users/data/types.ts";
-import { API_ROUTES, BASE_ROUTE } from "../utils/consts.ts";
-import { delay } from "../utils/time.ts";
-
+import { UserData } from "../types/index.ts"
+import { API_ROUTES, BASE_ROUTE } from "../utils/consts.ts"
+import { delay } from "../utils/time.ts"
+import { createTelegramInitData } from "./data/telegramInitData.ts"
+import { SlotsPlayState } from "./data/types.ts"
 
 // TODO - we do need a fake slots function, that pulls a day or more of slots play for a user
 // update their energy, tokens, points, slotsPlayState accumulators, slots plays, etc.
 
 export async function playSlotsUntilEnergyRunsOut(user: UserData) {
-  let currentEnergy = 1000000;
-  while (currentEnergy > 500) {
-    await delay(5100 + Math.floor(Math.random() * 1500));
-    currentEnergy = (await makeSlotsPlayCall(user))?.energyAtLastPlay || 0;
+  console.log(`Starting slots plays for user ${user.telegram_id}...`)
+  let currentEnergy = 1000000
+  while (currentEnergy >= 500) {
+    await delay(5100 + Math.floor(Math.random() * 1500))
+    currentEnergy = (await makeSlotsPlayCall(user))?.energyAtLastPlay || 0
   }
 }
 
-async function makeSlotsPlayCall(user: UserData): Promise<SlotsPlayState | null> {
+async function makeSlotsPlayCall(
+  user: UserData
+): Promise<SlotsPlayState | null> {
   try {
-    const telegramInitData = createTelegramInitData(user);
+    const telegramInitData = createTelegramInitData(user)
     const slotsPlayRequest = {
       telegramInitData: telegramInitData,
       timeZone: user.time_zone,
     }
+    console.log(
+      "Making slots play call for user:",
+      user.telegram_id,
+      slotsPlayRequest
+    )
     const slotsPlayResponse = await fetch(BASE_ROUTE + API_ROUTES.slotsPlay, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(slotsPlayRequest),
-    });
-    const slotsPlayData = await slotsPlayResponse.json();
-    console.log("Slots play response:", slotsPlayData);
+    })
+    const slotsPlayData = await slotsPlayResponse.json()
+
     if (slotsPlayResponse.ok) {
-      return slotsPlayData as SlotsPlayState;
+      console.log(
+        `Slots play response for user ${user.telegram_id} (${slotsPlayData.energyAtLastPlay} energy):`,
+        slotsPlayData
+      )
+      return slotsPlayData as SlotsPlayState
     } else {
-      return null;
+      console.error(
+        `Slots play response not ok for user ${user.telegram_id}:`,
+        slotsPlayResponse.status,
+        slotsPlayData
+      )
+      return null
     }
   } catch (e) {
-    console.error('Error making slots play call:', e);
-    return null;
+    console.error("Error making slots play call:", e)
+    return null
   }
 }

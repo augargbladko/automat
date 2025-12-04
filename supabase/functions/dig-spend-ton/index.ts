@@ -2,14 +2,11 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-import { secureConnectToSupabase } from "../queries/database/supaFunc.ts"
 import { denoServe, handleCORS } from "../utils/index.ts"
 
 denoServe(
   handleCORS(async (req: Request) => {
-    const group = await req.json()
-    console.log("Dig spoof GA called with group:", group)
-    const supabase = secureConnectToSupabase()
+    console.log("Dig spoof GA called")
 
     // or we just fake this, and run each user every ~6 hours? We know their spins etc, and we can just update their db data directly.
     // 24k users, 360 runs/6h. Run 100/h, and this works easily on a single cron job.

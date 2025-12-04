@@ -1,4 +1,3 @@
-
 export enum UserStatus {
   // initial state
   none = "none",
@@ -30,6 +29,14 @@ export enum UserStatus {
       invoices: Prisma.$UserInvoicePayload<ExtArgs>[]
 */
 
+export interface MongoSlotsUpdate {
+  telegramId: string
+  pointsBalance: number
+  tokenBalance: number
+  slotsPlayState: SlotsPlayState
+  lastLoginDay?: string
+  slotsLastPlayed?: string
+}
 
 export interface MongoUser {
   createdAt: Date
@@ -98,34 +105,34 @@ export enum PackageType {
 }
 
 export type GoldenSpinState = {
-  packageType: PackageType;
-  packageId: number;
-  result: number;
-  readyToCollect: boolean;
-  points: number;
-  tokens: number;
-};
+  packageType: PackageType
+  packageId: number
+  result: number
+  readyToCollect: boolean
+  points: number
+  tokens: number
+}
 
 export type SlotsResult = {
-  points: number;
-  tokens: number;
-  energy: number;
-  level: number; // you must be this level to collect the tokens listed
-  treasures: number[]; // treasure symbols, if any
-  reels: [number, number, number];
-  multipliers: [number, number, number]; // multipliers for each reel
-  baseScores: [number, number, number]; // scores for each reel
-  baseMult: number; // the base multiplier applied to the score (from user level or gold potion)
-  doublesMult: number; // the multiplier from matching symbols on different reels
+  points: number
+  tokens: number
+  energy: number
+  level: number // you must be this level to collect the tokens listed
+  treasures: number[] // treasure symbols, if any
+  reels: [number, number, number]
+  multipliers: [number, number, number] // multipliers for each reel
+  baseScores: [number, number, number] // scores for each reel
+  baseMult: number // the base multiplier applied to the score (from user level or gold potion)
+  doublesMult: number // the multiplier from matching symbols on different reels
   cards?: [
     [number, number, number, number] | null,
     [number, number, number, number] | null,
     [number, number, number, number] | null,
-  ]; // an array of CardResult id arrays - a valid array should either be empty or have 4 entries. Null if no card symbol was spun
-};
+  ] // an array of CardResult id arrays - a valid array should either be empty or have 4 entries. Null if no card symbol was spun
+}
 
 export type Achievement = {
-  difficulty: "EASY" | "MEDIUM" | "HARD";
+  difficulty: "EASY" | "MEDIUM" | "HARD"
   slug: string // stringified number
   progress: number
   isFinished: boolean
@@ -133,26 +140,25 @@ export type Achievement = {
   createdAt: Date
 }
 
-
 export type SlotsPlayState = {
-  lastPlayed: Date;
-  energyAtLastPlay?: number;
-  result: SlotsResult;
-  totalPointsEarned: number;
-  totalTokensEarned: number;
-  totalSpins: number;
-  achievements: Achievement[];
-};
+  lastPlayed?: string
+  energyAtLastPlay?: number
+  result: SlotsResult
+  totalPointsEarned: number
+  totalTokensEarned: number
+  totalSpins: number
+  achievements: Achievement[]
+}
 
 export type ItemsOwnedState = {
-  tool: Record<number, number>;
-  treasure: Record<number, number>;
-  elixir: Record<number, number>;
-  potion: Record<number, number>;
-};
+  tool: Record<number, number>
+  treasure: Record<number, number>
+  elixir: Record<number, number>
+  potion: Record<number, number>
+}
 
 export type DailyQuests = {
-  inviteOneFriend: string; // "2025-08-08"
+  inviteOneFriend: string // "2025-08-08"
 }
 
 export function defaultItemsState(): ItemsOwnedState {
@@ -181,5 +187,5 @@ export function defaultItemsState(): ItemsOwnedState {
       3: 0,
       4: 0,
     },
-  };
+  }
 }

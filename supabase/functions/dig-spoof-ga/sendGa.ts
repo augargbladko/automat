@@ -96,6 +96,7 @@ function createCreationGA(user: UserData, now: number): MpEvent[] {
         session_id,
         engagement_time_msec: Math.floor(Math.random() * 4000) + 1500,
         wallet: user.wallet_address || undefined,
+        debug_mode: 1,
       },
     },
     {
@@ -104,6 +105,7 @@ function createCreationGA(user: UserData, now: number): MpEvent[] {
         session_id,
         engagement_time_msec: Math.floor(Math.random() * 1000) + 500,
         promo_code: generatePromoCode(user.telegram_id.toString()),
+        debug_mode: 1,
       },
     },
   ]
@@ -293,6 +295,8 @@ async function sendGa(mpBody: MpBody, desc: string) {
   })
   if (!response.ok) {
     console.error(`GA ${desc} response not ok:`, response.status, response)
+  } else {
+    console.log(`GA ${desc} sent successfully`)
   }
 }
 

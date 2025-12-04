@@ -1,5 +1,5 @@
+import { LEVEL_DAY_DATA } from "../users/data/levelDayData.ts"
 import { convertDateToDayString } from "../utils/consts.ts"
-import { LEVEL_DAY_DATA } from "./data.ts"
 
 function modifyUserAdd(base: number): number {
   // apply some randomness

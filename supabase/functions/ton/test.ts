@@ -83,9 +83,6 @@ export async function TestSendStuff() {
 
 export async function TestTonStuff() {
   await TestSendStuff()
-  // Generate new key
-  const mnemonics = await mnemonicNew()
-  console.log("New mnemonic:", mnemonics.join(" "))
 
   // Create wallet contracts
   const wallets: WalletContractV4[] = []
@@ -128,8 +125,11 @@ export async function TestTonStuff() {
 }
 
 async function Test() {
-  TestTgInitData()
-  await TestTonStuff()
-  await TestSendStuff()
+  // Generate new key
+  const mnemonics = await mnemonicNew()
+  console.log("New mnemonic:", mnemonics.join(" "))
+  //TestTgInitData()
+  //await TestTonStuff()
+  //await TestSendStuff()
   Deno.exit()
 }

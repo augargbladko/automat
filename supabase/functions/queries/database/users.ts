@@ -6,7 +6,7 @@ export async function storeUsers(
   supabase: SupabaseClient,
   users: UserUpsert[]
 ): Promise<boolean> {
-  return await supabaseStoreArray(supabase, users, Tables.user_data)
+  return await supabaseStoreArray<UserUpsert>(supabase, users, Tables.user_data)
 }
 
 export async function storeUser(
@@ -17,7 +17,7 @@ export async function storeUser(
     onConflict: tableConflictKeys[Tables.user_data],
   })
   if (error) {
-    console.log("storeTelegramUser error", error)
+    console.log("storeUser error", error)
     return false
   } else {
     return true
