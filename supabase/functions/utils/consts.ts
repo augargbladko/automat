@@ -1,12 +1,12 @@
 export const BASE_ROUTE = "https://dig-it-gold.vercel.app"
-export const API_ROUTES = {
-  user: "/api/user", // { telegramInitData, referrerTelegramId, tonWalletAddress, timeZone }
-  wallet: "/api/user/wallet", // { telegramInitData, tonWalletAddress }
-  emailEntry: "/api/user/email/entry", // { telegramInitData, email }
-  emailConfirm: "/api/user/email/confirm", // { email, telegramId } << email must be entered as requested // const authToken = req.headers.get('Authorization'); if (!authToken || authToken !== process.env.KLAYVIO_AUTHORIZATION) {
-  purchaseTokens: "/api/verify-and-purchase-tokens", // { telegramInitData, packageId }
-  tonPurchase: "/api/verify-ton-purchase", // { packageId, packageType, transactionHash }
-  slotsPlay: "/api/games/slots", // { telegramInitData, timeZone }
+export enum ApiRoute {
+  user = "/api/user", // { telegramInitData, referrerTelegramId, tonWalletAddress, timeZone }
+  wallet = "/api/user/wallet", // { telegramInitData, tonWalletAddress }
+  emailEntry = "/api/user/email/entry", // { telegramInitData, email }
+  emailConfirm = "/api/user/email/confirm", // { email, telegramId } << email must be entered as requested // const authToken = req.headers.get('Authorization'); if (!authToken || authToken !== process.env.KLAYVIO_AUTHORIZATION) {
+  purchaseTokens = "/api/verify-and-purchase-tokens", // { telegramInitData, packageId }
+  tonPurchase = "/api/verify-ton-purchase", // { packageId, packageType, transactionHash }
+  slotsPlay = "/api/games/slots", // { telegramInitData, timeZone }
 }
 
 export function convertDateToDayString(date: Date): string {

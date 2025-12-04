@@ -81,3 +81,5 @@ async function UploadPhotos() {
   }
   Deno.exit()
 }
+
+// deno run --allow-all --env-file supabase/functions/mongodb/mongo.ts

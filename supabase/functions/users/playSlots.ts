@@ -1,5 +1,5 @@
 import { UserData } from "../types/index.ts"
-import { API_ROUTES, BASE_ROUTE } from "../utils/consts.ts"
+import { ApiRoute, BASE_ROUTE } from "../utils/consts.ts"
 import { delay } from "../utils/time.ts"
 import { createTelegramInitData } from "./data/telegramInitData.ts"
 import { SlotsPlayState } from "./data/types.ts"
@@ -30,7 +30,7 @@ async function makeSlotsPlayCall(
       user.telegram_id,
       slotsPlayRequest
     )
-    const slotsPlayResponse = await fetch(BASE_ROUTE + API_ROUTES.slotsPlay, {
+    const slotsPlayResponse = await fetch(BASE_ROUTE + ApiRoute.slotsPlay, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

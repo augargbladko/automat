@@ -12,9 +12,11 @@ denoServe(
   handleCORS(async () => {
     // we have 400s to play with.
     // should be able to do the whole function in under 100s, so 300 for delay.
-    const delayAmount = 1000 * Math.floor(Math.random() * 200)
-    console.log(`Dig add users called; delaying for ${delayAmount}ms`)
-    await delay(delayAmount)
+    const delaySeconds = Math.floor(Math.random() * 200)
+    console.log(
+      `Dig add users called; delaying for ${Math.floor(delaySeconds)}s`
+    )
+    await delay(delaySeconds * 1000)
     console.log("Starting dig add users process")
 
     if (isAddUsersDisabled) {

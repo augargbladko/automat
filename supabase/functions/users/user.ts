@@ -1,6 +1,6 @@
 import { getDb } from "../mongodb/mongo.ts"
 import { UserData } from "../types/index.ts"
-import { API_ROUTES, BASE_ROUTE } from "../utils/consts.ts"
+import { ApiRoute, BASE_ROUTE } from "../utils/consts.ts"
 import { createTelegramInitData } from "./data/telegramInitData.ts"
 import {
   ItemsOwnedState,
@@ -78,7 +78,7 @@ export async function getUser(user: UserData): Promise<MongoUser> {
     referrerTelegramId: user.referred_by_id?.toString(),
     timeZone: user.time_zone,
   }
-  const createUserResponse = await fetch(BASE_ROUTE + API_ROUTES.user, {
+  const createUserResponse = await fetch(BASE_ROUTE + ApiRoute.user, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

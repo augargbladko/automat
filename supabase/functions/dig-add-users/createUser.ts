@@ -8,10 +8,8 @@ import { UserStatus } from "../users/data/types.ts"
 import { getNextActionTime } from "../users/getNextActionTime.ts"
 import { subscribeProfileToList } from "../users/klaviyo.ts"
 import { playSlotsUntilEnergyRunsOut } from "../users/playSlots.ts"
-import { API_ROUTES, BASE_ROUTE } from "../utils/consts.ts"
+import { ApiRoute, BASE_ROUTE } from "../utils/consts.ts"
 import { delay } from "../utils/time.ts"
-
-const isTestCreate = true
 
 export async function createUser(
   supabase: SupabaseClient,
@@ -68,7 +66,7 @@ async function newUserCreate(user: UserData): Promise<boolean> {
     timeZone: user.time_zone,
   }
 
-  const createUserResponse = await fetch(BASE_ROUTE + API_ROUTES.user, {
+  const createUserResponse = await fetch(BASE_ROUTE + ApiRoute.user, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -93,7 +91,7 @@ async function newUserAddWallet(user: UserData): Promise<boolean> {
     tonWalletAddress: user.wallet_address,
   }
 
-  const addWalletResponse = await fetch(BASE_ROUTE + API_ROUTES.wallet, {
+  const addWalletResponse = await fetch(BASE_ROUTE + ApiRoute.wallet, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -102,11 +100,11 @@ async function newUserAddWallet(user: UserData): Promise<boolean> {
   })
   const addWalletData = await addWalletResponse.json()
   console.log("Add wallet response:", addWalletData)
-  await delay(1000)
+  await delay(2000)
   return addWalletResponse.ok
 }
 
-async function newUserConfirmEmail(user: UserData): Promise<boolean> {
+export async function newUserConfirmEmail(user: UserData): Promise<boolean> {
   const telegramInitData = createTelegramInitData(user)
   if (!user.email) {
     console.log(
@@ -121,7 +119,7 @@ async function newUserConfirmEmail(user: UserData): Promise<boolean> {
     email: user.email,
   }
 
-  const addEmailResponse = await fetch(BASE_ROUTE + API_ROUTES.emailEntry, {
+  const addEmailResponse = await fetch(BASE_ROUTE + ApiRoute.emailEntry, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -142,34 +140,31 @@ async function newUserConfirmEmail(user: UserData): Promise<boolean> {
   console.log("Add email response:", addEmailData)
 
   if (!user.confirmed_email) {
-    // if the user's email is not confirmed, we're done here.
+    // if the user's email should not be confirmed, we're done here.
     return true
   }
-  await delay(5000)
+  await delay(2000)
 
   // Klaviyo API call to confirm email
   if (!(await subscribeProfileToList(user))) {
     console.log("Klaviyo subscribe failed for user", user.telegram_id)
     return false
   }
-  await delay(2000)
+  await delay(5000)
 
   // api call to confirm email
   const confirmEmailRequest = {
     email: user.email,
     telegramId: user.telegram_id,
   }
-  const confirmEmailResponse = await fetch(
-    BASE_ROUTE + API_ROUTES.emailConfirm,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${Deno.env.get("KLAYVIO_AUTHORIZATION")}`,
-      },
-      body: JSON.stringify(confirmEmailRequest),
-    }
-  )
+  const confirmEmailResponse = await fetch(BASE_ROUTE + ApiRoute.emailConfirm, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${Deno.env.get("KLAYVIO_AUTHORIZATION")}`,
+    },
+    body: JSON.stringify(confirmEmailRequest),
+  })
   const confirmEmailData = await confirmEmailResponse.json()
   console.log("Confirm email response:", confirmEmailData)
   await delay(1000)
