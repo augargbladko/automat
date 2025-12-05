@@ -48,11 +48,6 @@ export async function subscribeProfileToList(user: UserData): Promise<boolean> {
         },
       },
     }
-    console.log(
-      "klayivoy data",
-      Deno.env.get("KLAYVIO_API_KEY"),
-      JSON.stringify(dataObject)
-    )
 
     const response = await fetch(
       `https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs`,

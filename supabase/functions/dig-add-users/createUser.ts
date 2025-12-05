@@ -55,12 +55,15 @@ export async function createUser(
     // all the real users get marked LIVE. 20% of the fake users get marked LIVE as well, to simulate some long tail activity.
     user.user_status =
       isRealUser || Math.random() < 0.2 ? UserStatus.live : UserStatus.complete
-    await storeUser(supabase, {
+    const userUpsert = {
       telegram_id: user.telegram_id,
       user_status: user.user_status,
       wallet_address: user.wallet_address || null,
       next_action_time: getNextActionTime(user),
-    })
+    }
+    if (!(await storeUser(supabase, userUpsert))) {
+      console.error("Failed to store supabase data for user", userUpsert)
+    }
 
     // run some fake slots plays for the user, so their data looks more realistic
     await playSlotsUntilEnergyRunsOut(user)
@@ -198,9 +201,10 @@ export async function confirmUserEmail(user: UserData): Promise<boolean> {
         body: JSON.stringify(confirmEmailRequest),
       }
     )
-    const confirmEmailData = await confirmEmailResponse.json()
-    console.log("Confirm email response:", confirmEmailData)
-    await delay(1000)
+    if (!confirmEmailResponse.ok) {
+      const confirmEmailData = await confirmEmailResponse.json()
+      console.error("Confirm email response not ok:", confirmEmailData)
+    }
     return confirmEmailResponse.ok
   } catch (error) {
     console.error("Error confirming email for user (final confirm):", error)
