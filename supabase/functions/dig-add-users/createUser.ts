@@ -145,6 +145,10 @@ export async function newUserConfirmEmail(user: UserData): Promise<boolean> {
   }
   await delay(2000)
 
+  return await confirmUserEmail(user)
+}
+
+export async function confirmUserEmail(user: UserData): Promise<boolean> {
   // Klaviyo API call to confirm email
   await subscribeProfileToList(user)
   await delay(5000)

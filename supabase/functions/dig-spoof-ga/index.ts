@@ -2,7 +2,8 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-import { AnyBulkWriteOperation, BulkWriteOptions } from "mongodb"
+import { AnyBulkWriteOperation, BulkWriteOptions, Filter } from "mongodb"
+import { confirmUserEmail } from "../dig-add-users/createUser.ts"
 import { getDb } from "../mongodb/mongo.ts"
 import { secureConnectToSupabase } from "../queries/database/supaFunc.ts"
 import { storeUsers } from "../queries/database/users.ts"
@@ -15,13 +16,13 @@ import { delay } from "../utils/time.ts"
 import { getSlotsUpdate } from "./getSlotsUpdate.ts"
 import { sendGaForUser } from "./sendGa.ts"
 
-const isDisabled = true
+const isGaDisabled = false
 
 denoServe(
   handleCORS(async (req: Request) => {
     try {
       console.log("Dig spoof GA called")
-      if (isDisabled) {
+      if (isGaDisabled) {
         console.error("Dig spoof GA is currently disabled.")
         return new Response(JSON.stringify({ success: true }), {
           headers: { "Content-Type": "application/json" },
@@ -54,7 +55,10 @@ denoServe(
           headers: { "Content-Type": "application/json" },
         })
       }
-      console.log(`Fetched ${data.length} supabase users`)
+      console.log(
+        `Fetched ${data.length} supabase users`,
+        data.map((u) => u.telegram_id + " " + u.next_action_time)
+      )
 
       // get users from MongoDB to get their slots data
       const userLookup: { [telegramId: string]: UserData } = {}
@@ -63,21 +67,27 @@ denoServe(
         userLookup[tgString] = user
         return tgString
       })
+      console.log("Pulling MongoDB users for telegram IDs:", mongoPull)
       const db = await getDb()
       const user = db.collection<MongoUser>("User")
-      const cursor = user.find({ telegram_id: { $in: mongoPull } })
-      const mData = await cursor.toArray()
+      const filter: Filter<MongoUser> = { telegramId: { $in: mongoPull } }
+      const mData = await user.find(filter).toArray()
       console.log(
         `Fetched ${mData.length} MongoDB users out of ${mongoPull.length} requested`,
-        mongoPull
+        mData
       )
 
+      const emailConfirmNeeded: UserData[] = []
       const slotsUpdates: MongoSlotsUpdate[] = mData
-        .map((mongoUser) =>
-          !mongoUser?.slotsPlayState?.lastPlayed
+        .map((mongoUser) => {
+          const user = userLookup[mongoUser.telegramId]
+          if (user.confirmed_email && !mongoUser.confirmedEmail) {
+            emailConfirmNeeded.push(user)
+          }
+          return !mongoUser?.slotsPlayState?.lastPlayed
             ? null
-            : getSlotsUpdate(userLookup[mongoUser.telegramId], mongoUser)
-        )
+            : getSlotsUpdate(user, mongoUser)
+        })
         .filter((update) => update !== null)
 
       console.log(
@@ -91,16 +101,16 @@ denoServe(
           user.referral_group || Math.random() < 0.2
             ? UserStatus.live
             : UserStatus.complete
-        const nugs =
-          (slotsUpdates.find(
-            (update) =>
-              update && update.telegramId === user.telegram_id.toString()
-          )?.tokenBalance || 0) / 1_000_000
+        const nugs = slotsUpdates.find(
+          (update) =>
+            update && update.telegramId === user.telegram_id.toString()
+        )?.tokenBalance
         return {
           next_action_time: getNextActionTime(user),
           user_status: user.user_status,
           telegram_id: user.telegram_id,
-          nugs: nugs || undefined,
+          nugs:
+            nugs === undefined ? undefined : Math.floor(nugs || 0) / 1_000_000,
         }
       })
       await storeUsers(supabase, userUpserts)
@@ -122,14 +132,29 @@ denoServe(
         retryWrites: true,
       }
 
-      const bulkResult = await db
-        .collection<MongoUser>("User")
-        .bulkWrite(bulkOps, options)
-      console.log(
-        `Updated slots data for ${bulkResult.modifiedCount} users from ${bulkOps.length} updates`,
-        bulkOps,
-        bulkResult
-      )
+      if (bulkOps.length > 0) {
+        const bulkResult = await db
+          .collection<MongoUser>("User")
+          .bulkWrite(bulkOps, options)
+        console.log(
+          `Updated slots data for ${bulkResult.modifiedCount} users from ${bulkOps.length} updates`,
+          bulkOps,
+          bulkResult
+        )
+      } else {
+        console.log("No slots updates to apply to MongoDB.")
+      }
+
+      // reconfirm email if we need to
+      if (emailConfirmNeeded.length > 0) {
+        console.log(
+          "Reconfirming email for users:",
+          emailConfirmNeeded.map((u) => u.telegram_id)
+        )
+        await Promise.all(
+          emailConfirmNeeded.map((user) => confirmUserEmail(user))
+        )
+      }
 
       // send the GA data for each user
       for (let i = 0; i < (data || []).length; i++) {
@@ -138,6 +163,8 @@ denoServe(
           console.log(`Skipping invalid user at index ${i}`)
           continue
         }
+
+        // Klaviyo API call to confirm email
 
         // only send the GA data if this user had its play time updated
         // 3 hours of GA data is more than enough
