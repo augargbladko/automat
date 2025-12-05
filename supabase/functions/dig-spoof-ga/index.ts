@@ -21,7 +21,6 @@ const isGaDisabled = false
 denoServe(
   handleCORS(async (req: Request) => {
     try {
-      console.log("Dig spoof GA called")
       if (isGaDisabled) {
         console.error("Dig spoof GA is currently disabled.")
         return new Response(JSON.stringify({ success: true }), {
@@ -50,14 +49,13 @@ denoServe(
         })
       }
       if (data.length === 0) {
-        console.log("No users found.")
         return new Response(JSON.stringify({ success: true }), {
           headers: { "Content-Type": "application/json" },
         })
       }
       console.log(
         `Fetched ${data.length} supabase users`,
-        data.map((u) => u.telegram_id + " " + u.next_action_time)
+        data.map((u) => `${u.telegram_id} (${u.next_action_time})`)
       )
 
       // get users from MongoDB to get their slots data
@@ -110,11 +108,17 @@ denoServe(
           user_status: user.user_status,
           telegram_id: user.telegram_id,
           nugs:
-            nugs === undefined ? undefined : Math.floor(nugs || 0) / 1_000_000,
+            nugs === undefined
+              ? undefined
+              : Math.floor((nugs || 0) / 1_000_000),
         }
       })
-      await storeUsers(supabase, userUpserts)
-      console.log(`Updated ${userUpserts.length} users in Supabase`)
+      if (!(await storeUsers(supabase, userUpserts))) {
+        console.error("Failed to update supabase records. Stopping")
+        return new Response(JSON.stringify({ success: false }), {
+          headers: { "Content-Type": "application/json" },
+        })
+      }
 
       // send the slots updates back to MongoDB
       const bulkOps: AnyBulkWriteOperation<MongoUser>[] = slotsUpdates.map(
@@ -173,15 +177,14 @@ denoServe(
           for (let j = 0; j < 3; j++) {
             await sendGaForUser(user, false, j * 3600 + Math.random() * 3600)
             await delay(10)
-            console.log(`Sent GA data for user ${tgId} #${j + 1}`)
           }
+          console.log(`Sent GA data for user ${tgId}`)
         } else {
           console.log(
             `Skipping GA send for user ${tgId} as no slots play time update`
           )
         }
       }
-      console.log(`updated GA data for ${data.length} users`)
     } catch (e) {
       console.error("Error in dig-spoof-ga function:", e)
     }

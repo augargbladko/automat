@@ -52,17 +52,20 @@ export function getSlotsUpdate(
     mongoUser.slotsPlayState?.lastPlayed || 0
   ).getTime()
   const shouldUpdateDate = date.getTime() - lastPlayed > lastPlayedGap
-  console.log(
-    `should update date for user ${user.telegram_id}:`,
-    shouldUpdateDate,
-    lastPlayed,
-    lastPlayedGap
-  )
+  const shouldUpdateDay =
+    shouldUpdateDate || mongoUser.lastLoginDay === todayString
+  if (shouldUpdateDate) {
+    console.log(
+      `should update date for user ${user.telegram_id}:`,
+      lastPlayed,
+      lastPlayedGap
+    )
+  }
 
   const slotsUpdate: MongoSlotsUpdate = {
     tokenBalance: mongoUser.tokenBalance + nugs,
     pointsBalance: mongoUser.pointsBalance + ore,
-    lastLoginDay: shouldUpdateDate ? todayString : undefined,
+    lastLoginDay: shouldUpdateDay ? todayString : undefined, // this won't update if it's "today", but it will trigger the GA run
     slotsLastPlayed: shouldUpdateDate ? date.toISOString() : undefined, // we don't update this one if we aren't updating the date
     slotsPlayState: {
       ...mongoUser.slotsPlayState,
@@ -79,9 +82,5 @@ export function getSlotsUpdate(
     },
     telegramId: mongoUser.telegramId,
   }
-  console.log(
-    `Prepared slots update for user ${user.telegram_id}:`,
-    slotsUpdate
-  )
   return slotsUpdate
 }

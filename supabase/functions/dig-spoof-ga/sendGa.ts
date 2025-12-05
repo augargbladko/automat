@@ -1,4 +1,3 @@
-import { testUserData } from "../ton/test.ts"
 import { UserData } from "../types/index.ts"
 import { generatePromoCode } from "../users/data/wordlist.ts"
 
@@ -32,7 +31,6 @@ export enum EventName {
 interface MpEventParams {
   session_id: string
   engagement_time_msec: number
-  // tODO other params based on event type
 }
 
 interface MpEvent {
@@ -301,45 +299,23 @@ export async function sendGaForUser(
   isFirstSignup: boolean,
   secondsAgo: number = 0
 ) {
-  const now = Date.now() - secondsAgo * 1000
+  try {
+    const now = Date.now() - secondsAgo * 1000
 
-  const sessionPlayGa = createSessionPlayGa(user, now)
-  const sessionPageGa = createSessionPageGa(user, now)
+    const sessionPlayGa = createSessionPlayGa(user, now)
+    const sessionPageGa = createSessionPageGa(user, now)
 
-  sessionPlayGa.events.length = 0
-  if (isFirstSignup) {
-    const creationGaEvents = createCreationGA(user, now)
-    sessionPlayGa.events.splice(0, 0, ...creationGaEvents)
+    sessionPlayGa.events.length = 0
+    if (isFirstSignup) {
+      const creationGaEvents = createCreationGA(user, now)
+      sessionPlayGa.events.splice(0, 0, ...creationGaEvents)
+    }
+
+    await sendGa(sessionPlayGa, "play session for " + user.telegram_id)
+    await sendGa(sessionPageGa, "page session for " + user.telegram_id)
+  } catch (error) {
+    console.error("Error sending GA for user", user.telegram_id, error)
   }
-
-  await sendGa(sessionPlayGa, "play session for " + user.telegram_id)
-  await sendGa(sessionPageGa, "page session for " + user.telegram_id)
 }
 
 // deno run --allow-all --env-file supabase/functions/dig-spoof-ga/sendGa.ts
-
-async function sendBogusGa() {
-  const user = testUserData()
-  const session_id = Date.now().toString()
-  const mpBody: MpBody = {
-    client_id: clientId(user),
-    timestamp_micros: (Date.now() * 1000).toString(),
-    user_location: userLocation(user),
-    device: deviceInfo(user),
-    events: [] as MpEvent[],
-  }
-  for (let i = 0; i < 5; i++) {
-    mpBody.events.push({
-      name: EventName.page_view,
-      params: {
-        session_id,
-        engagement_time_msec: 15000 + Math.floor(Math.random() * 20000),
-        page_location: "https://dig-it-gold.vercel.app/game",
-        page_path: "/test",
-        page_title: "test page",
-        debug_mode: 1,
-      },
-    })
-  }
-  await sendGa(mpBody, "bogus test")
-}
