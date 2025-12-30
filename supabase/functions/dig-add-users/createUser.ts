@@ -4,11 +4,12 @@ import { storeUser } from "../queries/database/users.ts"
 import { getWalletAddress } from "../ton/tonWallet.ts"
 import { UserData } from "../types/index.ts"
 import { createTelegramInitData } from "../users/data/telegramInitData.ts"
-import { UserStatus } from "../users/data/types.ts"
+import { MongoUserUpdate, UserStatus } from "../users/data/types.ts"
 import { getNextActionTime } from "../users/getNextActionTime.ts"
 import { subscribeProfileToList } from "../users/klaviyo.ts"
-import { playSlotsUntilEnergyRunsOut } from "../users/playSlots.ts"
+import { updateUser } from "../users/user.ts"
 import { ApiRoute, BASE_ROUTE } from "../utils/consts.ts"
+import { getUserAgent } from "../utils/index.ts"
 import { delay } from "../utils/time.ts"
 
 export async function createUser(
@@ -41,11 +42,9 @@ export async function createUser(
         `Failed to confirm email for user ${user.telegram_id}; continuing - we'll fix this later`,
         user
       )
-    } else {
-      console.log(
-        `Created user ${user.telegram_id} (${isRealUser ? "real" : "fake"})`
-      )
     }
+
+    await newUserSetCreationTime(user)
 
     // run the GA function for the user's first run(s)
     // don't await this; it's fire-and-forget
@@ -60,13 +59,11 @@ export async function createUser(
       user_status: user.user_status,
       wallet_address: user.wallet_address || null,
       next_action_time: getNextActionTime(user),
+      user_error: new Date().toISOString(),
     }
     if (!(await storeUser(supabase, userUpsert))) {
       console.error("Failed to store supabase data for user", userUpsert)
     }
-
-    // run some fake slots plays for the user, so their data looks more realistic
-    await playSlotsUntilEnergyRunsOut(user)
 
     console.log(
       `Completed initial analytics and data for ${user.telegram_id} (${isRealUser ? "real" : "fake"}) Status: ${user.user_status}`
@@ -91,11 +88,19 @@ async function newUserCreate(user: UserData): Promise<boolean> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "User-Agent": getUserAgent(),
       },
       body: JSON.stringify(userBody),
     })
-    const createUserData = await createUserResponse.json()
-    console.log("Create user response:", createUserData)
+    if (!createUserResponse.ok) {
+      const errorData = await createUserResponse.text()
+      console.error(
+        `Create user failed for ${user.telegram_id}:`,
+        userBody,
+        createUserResponse.status,
+        errorData
+      )
+    }
     await delay(1000)
     return createUserResponse.ok
   } catch (error) {
@@ -121,6 +126,7 @@ async function newUserAddWallet(user: UserData): Promise<boolean> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "User-Agent": getUserAgent(),
       },
       body: JSON.stringify(walletRequest),
     })
@@ -133,13 +139,26 @@ async function newUserAddWallet(user: UserData): Promise<boolean> {
   }
 }
 
+async function newUserSetCreationTime(user: UserData): Promise<void> {
+  try {
+    const creation = new Date()
+    // send creation back up to 10 minutes into the past
+    // ensure created day lines up with creation time
+    creation.setMinutes(creation.getMinutes() - Math.floor(Math.random() * 10))
+    const userUpdate: MongoUserUpdate = {
+      createdAt: creation,
+      createdDay: creation.toISOString().split("T")[0],
+    }
+    await updateUser(userUpdate, user)
+  } catch (error) {
+    console.error("Error setting user creation time:", error)
+  }
+}
+
 export async function newUserConfirmEmail(user: UserData): Promise<boolean> {
   try {
     const telegramInitData = createTelegramInitData(user)
     if (!user.email) {
-      console.log(
-        `No email for user ${user.telegram_id}, skipping email add/confirm.`
-      )
       return true
     }
 
@@ -153,6 +172,7 @@ export async function newUserConfirmEmail(user: UserData): Promise<boolean> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "User-Agent": getUserAgent(),
       },
       body: JSON.stringify(addEmailRequest),
     })
@@ -197,6 +217,7 @@ export async function confirmUserEmail(user: UserData): Promise<boolean> {
         headers: {
           "Content-Type": "application/json",
           Authorization: `${Deno.env.get("KLAYVIO_AUTHORIZATION")}`,
+          "User-Agent": getUserAgent(),
         },
         body: JSON.stringify(confirmEmailRequest),
       }

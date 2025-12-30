@@ -1,5 +1,6 @@
 import { UserData } from "../types/index.ts"
 import { ApiRoute, BASE_ROUTE } from "../utils/consts.ts"
+import { getUserAgent } from "../utils/fetch.ts"
 import { delay } from "../utils/time.ts"
 import { createTelegramInitData } from "./data/telegramInitData.ts"
 import { SlotsPlayState } from "./data/types.ts"
@@ -25,6 +26,7 @@ async function makeSlotsPlayCall(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "User-Agent": getUserAgent(),
       },
       body: JSON.stringify(slotsPlayRequest),
     })

@@ -1,6 +1,7 @@
 import { getDb } from "../mongodb/mongo.ts"
 import { UserData } from "../types/index.ts"
 import { ApiRoute, BASE_ROUTE } from "../utils/consts.ts"
+import { getUserAgent } from "../utils/fetch.ts"
 import { createTelegramInitData } from "./data/telegramInitData.ts"
 import {
   ItemsOwnedState,
@@ -82,6 +83,7 @@ export async function getUser(user: UserData): Promise<MongoUser> {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "User-Agent": getUserAgent(),
     },
     body: JSON.stringify(userBody),
   })
@@ -92,21 +94,19 @@ export async function getUser(user: UserData): Promise<MongoUser> {
 
 export async function updateUser(
   update: MongoUserUpdate,
-  user: UserData
+  user: { telegram_id: number }
 ): Promise<boolean> {
-  const db = await getDb()
-  const users = db.collection("User")
-  const dbUser = await users.findOne({
-    where: { telegramId: user.telegram_id },
-  })
-  if (!dbUser) {
-    console.error("User not found in DB for update:", user.telegram_id)
+  try {
+    const db = await getDb()
+    const users = db.collection("User")
+
+    const result = await users.findOneAndUpdate(
+      { telegramId: user.telegram_id.toString() },
+      { $set: update }
+    )
+    return !!result
+  } catch (error) {
+    console.error("Error updating user:", error)
     return false
   }
-
-  const result = await users.findOneAndUpdate(
-    { telegramId: user.telegram_id },
-    { $set: update }
-  )
-  return !!result
 }

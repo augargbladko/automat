@@ -155,9 +155,13 @@ denoServe(
           "Reconfirming email for users:",
           emailConfirmNeeded.map((u) => u.telegram_id)
         )
-        await Promise.all(
-          emailConfirmNeeded.map((user) => confirmUserEmail(user))
-        )
+        try {
+          await Promise.all(
+            emailConfirmNeeded.map((user) => confirmUserEmail(user))
+          )
+        } catch (e) {
+          console.error("Error reconfirming emails:", e)
+        }
       }
 
       // send the GA data for each user
