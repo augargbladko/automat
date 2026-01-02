@@ -17,6 +17,40 @@ const LEVEL_TO_PLAY_GAP: { [level: number]: number } = {
   10: 11 * 24 * 60 * 60 * 1000,
 }
 
+const DAYS_BEHIND_GAP = {
+  0: 5,
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 4,
+  6: 4,
+  7: 4,
+  8: 4,
+  9: 4,
+  10: 4,
+}
+
+export function fixTotalSpins(mongoUser: MongoUser): number {
+  if ((mongoUser.slotsPlayState?.totalSpins || 0) < 10) {
+    return mongoUser.slotsPlayState?.totalSpins || 0
+  }
+  const nowDate = new Date()
+  const createdAt = mongoUser.createdAt
+  if (!createdAt || nowDate <= createdAt) {
+    return (
+      mongoUser.slotsPlayState.totalSpins || Math.floor(Math.random() * 3 + 2)
+    )
+  }
+  const maxSpins = (nowDate.getTime() - createdAt.getTime()) / 1000 / (60 * 12) // 1 spin every 12 minutes
+  const halfMax = maxSpins / 2
+  if (mongoUser.slotsPlayState.totalSpins > halfMax * 1.5) {
+    return Math.floor(halfMax * (0.9 + Math.random() * 0.3))
+  } else {
+    return mongoUser.slotsPlayState.totalSpins
+  }
+}
+
 export function getSlotsUpdate(
   user: UserData,
   mongoUser: MongoUser
@@ -33,11 +67,8 @@ export function getSlotsUpdate(
   const todayString = convertDateToDayString(date)
 
   let { ore, nugs } = LEVEL_DAY_DATA[todayString] || {
-    day: todayString,
     ore: 0,
     nugs: 0,
-    real: 0,
-    fake: 0,
   }
   ore = Math.floor((ore * 0.8 + Math.random() * ore * 0.4) / 4 / 1000) * 1000
   nugs = Math.floor((nugs * 0.3 + Math.random() * nugs * 1.4) / 4 / 50) * 50
@@ -65,22 +96,53 @@ export function getSlotsUpdate(
   const slotsUpdate: MongoSlotsUpdate = {
     tokenBalance: mongoUser.tokenBalance + nugs,
     pointsBalance: mongoUser.pointsBalance + ore,
-    lastLoginDay: shouldUpdateDay ? todayString : undefined, // this won't update if it's "today", but it will trigger the GA run
-    slotsLastPlayed: shouldUpdateDate ? date.toISOString() : undefined, // we don't update this one if we aren't updating the date
+    lastLoginDay: todayString, // this will trigger the GA run only if it's "today"
+    slotsLastPlayed: date.toISOString(), // we don't update this one if we aren't updating the date
+    lastActivityAt: date,
+    energyFullNotificationTime: new Date(
+      date.getTime() +
+        60 * 60 * 1000 +
+        Math.floor((2 + Math.random() * 7) * 60 * 1000) // add the 10-ish mins to be more random
+    ), // 1 hour from now,
     slotsPlayState: {
       ...mongoUser.slotsPlayState,
       totalPointsEarned: mongoUser.slotsPlayState.totalPointsEarned + ore,
       totalTokensEarned: mongoUser.slotsPlayState.totalTokensEarned + nugs,
       totalSpins:
         mongoUser.slotsPlayState.totalSpins +
-        5 * 6 +
-        Math.floor(Math.random() * 6),
+        5 * 3 +
+        Math.floor(Math.random() * 4),
       energyAtLastPlay: 100 + Math.floor(Math.random() * 300),
       lastPlayed: shouldUpdateDate
         ? date.toISOString()
         : mongoUser.slotsPlayState.lastPlayed,
     },
     telegramId: mongoUser.telegramId,
+  }
+
+  slotsUpdate.slotsPlayState.totalSpins = fixTotalSpins(mongoUser)
+
+  if (!shouldUpdateDay) {
+    // fix old last login day if needed
+    const newDay = convertDateToDayString(
+      new Date(slotsUpdate.slotsPlayState.lastPlayed!)
+    )
+    if (!mongoUser.lastLoginDay && newDay < todayString) {
+      mongoUser.lastLoginDay = newDay
+    } else {
+      delete slotsUpdate.lastLoginDay
+    }
+  }
+  if (!shouldUpdateDate) {
+    slotsUpdate.slotsLastPlayed = slotsUpdate.slotsPlayState.lastPlayed
+    slotsUpdate.lastActivityAt = new Date(
+      slotsUpdate.slotsPlayState.lastPlayed!
+    )
+    slotsUpdate.energyFullNotificationTime = new Date(
+      slotsUpdate.lastActivityAt.getTime() +
+        60 * 60 * 1000 + // 1 hour from now,
+        Math.floor((2 + Math.random() * 7) * 60 * 1000) // add the 10-ish mins to be more random
+    )
   }
   return slotsUpdate
 }

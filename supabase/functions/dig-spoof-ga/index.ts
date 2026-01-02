@@ -11,6 +11,7 @@ import { UserCol } from "../types/database.ts"
 import { Tables, UserData, UserUpsert } from "../types/index.ts"
 import { MongoSlotsUpdate, MongoUser, UserStatus } from "../users/data/types.ts"
 import { getNextActionTime } from "../users/getNextActionTime.ts"
+import { convertDateToDayString } from "../utils/consts.ts"
 import { denoServe, handleCORS } from "../utils/index.ts"
 import { delay } from "../utils/time.ts"
 import { getSlotsUpdate } from "./getSlotsUpdate.ts"
@@ -163,6 +164,7 @@ denoServe(
           console.error("Error reconfirming emails:", e)
         }
       }
+      const todayString = convertDateToDayString(new Date())
 
       // send the GA data for each user
       for (let i = 0; i < (data || []).length; i++) {
@@ -177,16 +179,14 @@ denoServe(
         // only send the GA data if this user had its play time updated
         // 3 hours of GA data is more than enough
         const tgId = user.telegram_id.toString()
-        if (slotsUpdates.find((u) => u.telegramId === tgId)?.lastLoginDay) {
+        if (
+          slotsUpdates.find((u) => u.telegramId === tgId)?.lastLoginDay ===
+          todayString
+        ) {
           for (let j = 0; j < 3; j++) {
             await sendGaForUser(user, false, j * 3600 + Math.random() * 3600)
             await delay(10)
           }
-          console.log(`Sent GA data for user ${tgId}`)
-        } else {
-          console.log(
-            `Skipping GA send for user ${tgId} as no slots play time update`
-          )
         }
       }
     } catch (e) {

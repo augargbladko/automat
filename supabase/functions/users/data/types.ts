@@ -4,6 +4,7 @@ export enum UserStatus {
   // activity statuses, can be live or complete, can also fall out to error
   live = "live",
   complete = "complete",
+  fixed = "fixed",
   // withdrawal statuses
   funded = "funded",
   collected = "collected",
@@ -33,6 +34,8 @@ export interface MongoSlotsUpdate {
   telegramId: string
   pointsBalance: number
   tokenBalance: number
+  lastActivityAt?: Date
+  energyFullNotificationTime?: Date
   slotsPlayState: SlotsPlayState
   lastLoginDay?: string
   slotsLastPlayed?: string
@@ -71,6 +74,8 @@ export interface MongoUser {
   starsSpend: number | null
   requestedEmail: string | null
   confirmedEmail: string | null
+  lastActivityAt: Date | null
+  energyFullNotificationTime: Date | null
 }
 
 export interface MongoUserUpdate {
