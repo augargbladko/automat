@@ -70,8 +70,15 @@ export function getSlotsUpdate(
     ore: 0,
     nugs: 0,
   }
+
   ore = Math.floor((ore * 0.8 + Math.random() * ore * 0.4) / 4 / 1000) * 1000
   nugs = Math.floor((nugs * 0.3 + Math.random() * nugs * 1.4) / 4 / 50) * 50
+
+  // Yikes, need to stop the zero referrals getting tons of nugs/ore
+  if (user.referral_group === 0) {
+    ore = Math.floor(8 + Math.random() * 40) * 1000
+    nugs = Math.floor(Math.random() * 20) * 50
+  }
   if (ore <= 0) {
     console.log("No ore to award for user:", user.telegram_id)
     return null

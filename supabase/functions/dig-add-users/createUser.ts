@@ -27,6 +27,7 @@ export async function createUser(
       console.error(`Failed to create user ${user.telegram_id}`, user)
       return 0
     }
+    await delay(1000)
     isSuccess = await newUserAddWallet(user)
     if (!isSuccess) {
       console.error(
@@ -35,6 +36,7 @@ export async function createUser(
       )
       return 0
     }
+    await delay(1000)
 
     isSuccess = await newUserConfirmEmail(user)
     if (!isSuccess) {
@@ -43,6 +45,7 @@ export async function createUser(
         user
       )
     }
+    await delay(1000)
 
     await newUserSetCreationTime(user)
 

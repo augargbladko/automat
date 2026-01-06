@@ -9,7 +9,7 @@ NOTIFY pgrst, 'reload config';
 select
   cron.schedule(
     'invoke-add-users-every-10-minutes',
-    '*/10 * * * *', -- every 10 minutes
+    '* * * * *', -- every 10 minutes
     $$ SELECT call_webhook('dig-add-users', '{}'); $$
   );
 

@@ -44,7 +44,12 @@ function modifyUserAdd(base: number): number {
   } else if (chance >= 1 - threeChance) {
     base = Math.max(0, base - 3)
   }
-  return base
+
+  const actual = Math.floor(base / 10)
+
+  const remainder = base % 10
+
+  return actual + (Math.random() < remainder ? 1 : 0)
 }
 
 export function getNumberOfUsersToAdd(): { realAdd: number; fakeAdd: number } {

@@ -16,7 +16,7 @@ import {
   handleCORS,
 } from "../utils/index.ts"
 
-const isFixDisabled = false
+const isFixDisabled = true
 
 async function undoFixed() {
   const supabase = secureConnectToSupabase()
@@ -52,7 +52,7 @@ denoServe(
   handleCORS(async (req: Request) => {
     try {
       if (isFixDisabled) {
-        console.error("Dig upgrade users is currently disabled.")
+        console.log("Dig upgrade users is currently disabled.")
         return new Response(JSON.stringify({ success: true }), {
           headers: { "Content-Type": "application/json" },
         })
@@ -70,7 +70,7 @@ denoServe(
         .from(Tables.user_data)
         .select("*")
         .eq(UserCol.user_status, UserStatus.complete)
-        .limit(7)
+        .limit(15)
 
       if (error || !data) {
         console.error("Error fetching users:", error)

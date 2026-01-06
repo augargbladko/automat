@@ -100,21 +100,22 @@ export async function createUsers(): Promise<void> {
           }
         })
       }
-
-      const fakeResults = await Promise.all(
-        fakeUsers.map((user) => createUser(supabase, user))
-      )
+      const fakeResults: number[] = []
+      for (let i = 0; i < fakeUsers.length; i++) {
+        fakeResults.push(await createUser(supabase, fakeUsers[i]))
+      }
       console.log(
         `created ${fakeResults.length} of ${fakeUsers.length} fake users:`,
         fakeResults
       )
     }
+
     // run some fake slots plays for the user, so their data looks more realistic
-    await Promise.all(
-      [...realUsers, ...fakeUsers].map((user) =>
-        playSlotsUntilEnergyRunsOut(user)
-      )
-    )
+    const allUsers = [...realUsers, ...fakeUsers]
+    for (let i = 0; i < allUsers.length; i++) {
+      await playSlotsUntilEnergyRunsOut(allUsers[i])
+    }
+
     console.log(
       `completed initial slots for ${realUsers.length} users and ${fakeUsers.length} fake users`
     )
