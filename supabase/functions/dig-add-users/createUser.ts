@@ -78,6 +78,26 @@ export async function createUser(
   }
 }
 
+export async function updateUserToComplete(
+  supabase: SupabaseClient,
+  user: UserData
+) {
+  try {
+    const userUpsert = {
+      telegram_id: user.telegram_id,
+      user_status: UserStatus.complete,
+      user_error: new Date().toISOString(),
+    }
+    if (!(await storeUser(supabase, userUpsert))) {
+      console.error("Failed to store supabase data for user", userUpsert)
+    } else {
+      console.log(`Updated user ${user.telegram_id} to complete status`)
+    }
+  } catch (e) {
+    console.error(`Error removing user ${user.telegram_id}:`, e)
+  }
+}
+
 async function newUserCreate(user: UserData): Promise<boolean> {
   try {
     const telegramInitData = createTelegramInitData(user)

@@ -1,7 +1,9 @@
 import { LEVEL_DAY_DATA } from "../users/data/levelDayData.ts"
 import { convertDateToDayString } from "../utils/consts.ts"
 
-function modifyUserAdd(base: number): number {
+function modifyUserAdd(input: number): number {
+  const sign = input >= 0 ? 1 : -1
+  let base = Math.abs(input)
   // apply some randomness
   let threeChance = 0
   let twoChance = 0
@@ -45,11 +47,16 @@ function modifyUserAdd(base: number): number {
     base = Math.max(0, base - 3)
   }
 
+  // if we can vary the divisor by time of day, we can get a spiky graph.
+  // get the hour
+  // rotate it by the day of the month
+  // get a 5, and 7 sawtooth or similar
+
   const actual = Math.floor(base / 10)
 
   const remainder = base % 10
 
-  return actual + (Math.random() < remainder ? 1 : 0)
+  return sign * (actual + (Math.random() < remainder ? 1 : 0))
 }
 
 export function getNumberOfUsersToAdd(): { realAdd: number; fakeAdd: number } {
@@ -59,14 +66,12 @@ export function getNumberOfUsersToAdd(): { realAdd: number; fakeAdd: number } {
   const tomorrowString = convertDateToDayString(nextDay)
   const today = LEVEL_DAY_DATA[dayString] || {
     day: dayString,
-    ore: 0,
     nugs: 0,
     real: 0,
     fake: 0,
   }
   const tomorrow = LEVEL_DAY_DATA[tomorrowString] || {
     day: tomorrowString,
-    ore: 0,
     nugs: 0,
     real: 0,
     fake: 0,
@@ -77,20 +82,14 @@ export function getNumberOfUsersToAdd(): { realAdd: number; fakeAdd: number } {
   const usersToAdd = {
     realAdd: Math.floor(
       modifyUserAdd(
-        Math.max(
-          0,
-          today.real +
-            (tomorrow.real - today.real) * adjustmentFactor * Math.random() * 2
-        )
+        today.real +
+          (tomorrow.real - today.real) * adjustmentFactor * Math.random() * 2
       )
     ),
     fakeAdd: Math.floor(
       modifyUserAdd(
-        Math.max(
-          0,
-          today.fake +
-            (tomorrow.fake - today.fake) * adjustmentFactor * Math.random() * 2
-        )
+        today.fake +
+          (tomorrow.fake - today.fake) * adjustmentFactor * Math.random() * 2
       )
     ),
   }

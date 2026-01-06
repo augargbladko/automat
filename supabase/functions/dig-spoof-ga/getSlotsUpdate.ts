@@ -66,13 +66,11 @@ export function getSlotsUpdate(
   const date = new Date()
   const todayString = convertDateToDayString(date)
 
-  let { ore, nugs } = LEVEL_DAY_DATA[todayString] || {
-    ore: 0,
-    nugs: 0,
-  }
+  let nugs = (LEVEL_DAY_DATA[todayString]?.nugs || 0) * 1e6
+  let ore = nugs * (8 + Math.random() * 4) // 8x to 12x the amount of ore
 
-  ore = Math.floor((ore * 0.8 + Math.random() * ore * 0.4) / 4 / 1000) * 1000
   nugs = Math.floor((nugs * 0.3 + Math.random() * nugs * 1.4) / 4 / 50) * 50
+  ore = Math.floor((ore * 0.8 + Math.random() * ore * 0.4) / 4 / 1000) * 1000
 
   // Yikes, need to stop the zero referrals getting tons of nugs/ore
   if (user.referral_group === 0) {

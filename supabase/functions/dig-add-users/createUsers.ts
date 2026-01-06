@@ -4,7 +4,7 @@ import { Tables } from "../types/index.ts"
 import { UserData } from "../types/tables.ts"
 import { UserStatus } from "../users/data/types.ts"
 import { playSlotsUntilEnergyRunsOut } from "../users/playSlots.ts"
-import { createUser } from "./createUser.ts"
+import { createUser, updateUserToComplete } from "./createUser.ts"
 import { getNumberOfUsersToAdd } from "./getNumberOfUsersToAdd.ts"
 
 export async function createUsers(): Promise<void> {
@@ -40,6 +40,25 @@ export async function createUsers(): Promise<void> {
         `created ${userIds.length} of ${realAdd} real users:`,
         userIds
       )
+    } else if (realAdd < 0) {
+      const realRemove = -realAdd
+      console.log(`Removing ${realRemove} real users this cycle`)
+
+      const removeResult = await supabase
+        .from(Tables.user_data)
+        .select("*")
+        .neq(UserCol.referral_group, 0)
+        .eq(UserCol.user_status, UserStatus.live)
+        .order(UserCol.referral_pos, { ascending: true })
+        .limit(realRemove)
+      const toRemove = removeResult.data || []
+      console.log(
+        `Found ${toRemove.length} of ${realRemove} real users to remove`,
+        removeResult.data,
+        removeResult.error
+      )
+      toRemove.map((user) => updateUserToComplete(supabase, user))
+      realUsers = []
     } else {
       console.log("No real users to add this cycle")
       realUsers = []
@@ -79,7 +98,7 @@ export async function createUsers(): Promise<void> {
         .neq(UserCol.referral_group, 0)
         .eq(UserCol.user_status, UserStatus.live)
         .order(UserCol.referral_pos, { ascending: true })
-        .limit(1000)
+        .limit(5000)
 
       if (result.error) {
         console.error("error getting referral users", result.error, result.data)
@@ -88,7 +107,7 @@ export async function createUsers(): Promise<void> {
         (user) => user.telegram_id
       ) as number[]
 
-      // give the fake users with treferrals listed referrals from real live users
+      // give the fake users with referrals listed referrals from real live users
       if (ids.length > 0) {
         fakeUsers.forEach((user) => {
           if ((user.referred_by_id || 0) > 0) {
