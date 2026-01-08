@@ -1,14 +1,16 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js"
+import process from "node:process"
 import { Database } from "../types/supabase.ts"
-import { supabaseServiceRoleKey, supabaseUrl } from "./index.ts"
 
 export function secureConnectToSupabase(): SupabaseClient<Database> {
   const supabaseClient: SupabaseClient<Database> = createClient<Database>(
-    supabaseUrl,
-    supabaseServiceRoleKey,
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+    process.env.SUPABASE_SERVICE_ROLE_KEY || "",
     {
       global: {
-        headers: { Authorization: `Bearer ${supabaseServiceRoleKey}` },
+        headers: {
+          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY || ""}`,
+        },
         fetch(url, options) {
           return fetch(url, {
             cache: "no-cache",

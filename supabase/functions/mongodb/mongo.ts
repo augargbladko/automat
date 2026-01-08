@@ -70,7 +70,7 @@ export async function getDb(): Promise<Db> {
   })
   console.log("Uploading photo URLs to Supabase for", lines.length, "users")
 
-  const supabase = secureConnectToSupabase()
+  const supabase = denoConnectToSupabase()
   for (let i = 1; i < lines.length; i += 1000) {
     await storeUsers(supabase, lines.slice(i, i + 1000))
     console.log("Uploaded photos for users", i, "to", i + 1000)

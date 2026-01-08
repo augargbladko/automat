@@ -6,20 +6,17 @@ import { AnyBulkWriteOperation, BulkWriteOptions, Filter } from "mongodb"
 import { denoServe } from "../deno/deno.ts"
 import { fixTotalSpins } from "../dig-spoof-ga/getSlotsUpdate.ts"
 import { getDb } from "../mongodb/mongo.ts"
+import { denoConnectToSupabase } from "../queries/database/supaFunc.ts"
 import { storeUsers } from "../queries/database/users.ts"
 import { UserCol } from "../types/database.ts"
 import { Tables, UserData, UserUpsert } from "../types/index.ts"
 import { MongoSlotsUpdate, MongoUser, UserStatus } from "../users/data/types.ts"
-import {
-  convertDateToDayString,
-  handleCORS,
-  secureConnectToSupabase,
-} from "../utils/index.ts"
+import { convertDateToDayString, handleCORS } from "../utils/index.ts"
 
 const isFixDisabled = true
 
 async function undoFixed() {
-  const supabase = secureConnectToSupabase()
+  const supabase = denoConnectToSupabase()
   let length = 1
   while (length > 0) {
     const { data, error } = await supabase
@@ -58,7 +55,7 @@ denoServe(
         })
       }
       // await undoFixed()
-      const supabase = secureConnectToSupabase()
+      const supabase = denoConnectToSupabase()
 
       // we need valid-looking GA data for users
       // find the next N users that we can run GA data for.

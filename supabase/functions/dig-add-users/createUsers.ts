@@ -1,16 +1,16 @@
+import { denoConnectToSupabase } from "../queries/database/supaFunc.ts"
 import { UserCol } from "../types/database.ts"
 import { Tables } from "../types/index.ts"
 import { UserData } from "../types/tables.ts"
 import { UserStatus } from "../users/data/types.ts"
 import { playSlotsUntilEnergyRunsOut } from "../users/playSlots.ts"
-import { secureConnectToSupabase } from "../utils/index.ts"
 import { createUser, updateUserToComplete } from "./createUser.ts"
 import { getNumberOfUsersToAdd } from "./getNumberOfUsersToAdd.ts"
 
 export async function createUsers(): Promise<void> {
   try {
     let realUsers: UserData[]
-    const supabase = secureConnectToSupabase()
+    const supabase = denoConnectToSupabase()
 
     // figure out the correct number of users to add in this 10min block.
     const { realAdd, fakeAdd } = getNumberOfUsersToAdd()

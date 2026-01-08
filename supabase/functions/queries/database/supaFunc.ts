@@ -3,8 +3,29 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js"
 import { tableConflictKeys } from "../../types/database.ts"
 import { Tables } from "../../types/interfaces/enums.ts"
 import { Database } from "../../types/supabase.ts"
-import { supabaseAnonKey, supabaseUrl } from "../../utils/index.ts"
 
+declare const Deno: {
+  env: { get: (key: string) => string | undefined }
+  serve: any
+}
+
+const supabaseUrl = Deno.env.get("SUPABASE_URL") || ""
+const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") || ""
+const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || ""
+
+export function denoConnectToSupabase(): SupabaseClient<Database> {
+  console.log("Connecting to supabase securely", supabaseUrl)
+  const supabaseClient: SupabaseClient<Database> = createClient<Database>(
+    supabaseUrl,
+    supabaseServiceRoleKey,
+    {
+      global: {
+        headers: { Authorization: `Bearer ${supabaseServiceRoleKey}` },
+      },
+    }
+  )
+  return supabaseClient
+}
 export function connectToSupabase(req: Request): SupabaseClient {
   const authHeader = req.headers.get("Authorization")!
   const supabaseClient: SupabaseClient = createClient<Database>(
