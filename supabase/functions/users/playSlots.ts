@@ -26,7 +26,7 @@ export async function playSlotsUntilEnergyRunsOut(user: UserData) {
     mult = mult + (Math.random() < 0.25 ? 1 : 0)
   }
   let playsLeft =
-    user.referral_group === 0 ? Math.floor(Math.random() * mult) + 1 : 500
+    user.referral_group === 0 ? Math.floor(Math.random() * mult) : 500
   while (playsLeft > 0 && currentEnergy >= 500) {
     await delay(5100 + Math.floor(Math.random() * 1500))
     currentEnergy = (await makeSlotsPlayCall(user))?.energyAtLastPlay || 0

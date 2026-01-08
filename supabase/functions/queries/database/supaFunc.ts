@@ -3,31 +3,24 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js"
 import { tableConflictKeys } from "../../types/database.ts"
 import { Tables } from "../../types/interfaces/enums.ts"
 import { Database } from "../../types/supabase.ts"
-import {
-  supabaseAnonKey,
-  supabaseServiceRoleKey,
-  supabaseUrl,
-} from "../../utils/index.ts"
-
-export function secureConnectToSupabase(): SupabaseClient<Database> {
-  const supabaseClient: SupabaseClient<Database> = createClient<Database>(
-    supabaseUrl,
-    supabaseServiceRoleKey,
-    {
-      global: {
-        headers: { Authorization: `Bearer ${supabaseServiceRoleKey}` },
-      },
-    }
-  )
-  return supabaseClient
-}
+import { supabaseAnonKey, supabaseUrl } from "../../utils/index.ts"
 
 export function connectToSupabase(req: Request): SupabaseClient {
   const authHeader = req.headers.get("Authorization")!
   const supabaseClient: SupabaseClient = createClient<Database>(
     supabaseUrl,
     supabaseAnonKey,
-    { global: { headers: { Authorization: authHeader } } }
+    {
+      global: {
+        headers: { Authorization: authHeader },
+        fetch(url, options) {
+          return fetch(url, {
+            cache: "no-cache",
+            ...options,
+          })
+        },
+      },
+    }
   )
   return supabaseClient
 }

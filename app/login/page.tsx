@@ -2,11 +2,12 @@ import { createClient } from "@/components/utils/db/server"
 import { redirect } from "next/navigation"
 import { SubmitButton } from "./submit-button"
 
-export default function Login({
+export default async function Login({
   searchParams,
 }: {
   searchParams: { message: string }
 }) {
+  const params = await searchParams
   const signIn = async (formData: FormData) => {
     "use server"
 
@@ -59,9 +60,9 @@ export default function Login({
         >
           Sign In
         </SubmitButton>
-        {searchParams?.message && (
+        {params?.message && (
           <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-            {searchParams.message}
+            {params.message}
           </p>
         )}
       </form>

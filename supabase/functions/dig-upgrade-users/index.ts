@@ -3,17 +3,17 @@
 // This enables autocomplete, go to definition, etc.
 
 import { AnyBulkWriteOperation, BulkWriteOptions, Filter } from "mongodb"
+import { denoServe } from "../deno/deno.ts"
 import { fixTotalSpins } from "../dig-spoof-ga/getSlotsUpdate.ts"
 import { getDb } from "../mongodb/mongo.ts"
-import { secureConnectToSupabase } from "../queries/database/supaFunc.ts"
 import { storeUsers } from "../queries/database/users.ts"
 import { UserCol } from "../types/database.ts"
 import { Tables, UserData, UserUpsert } from "../types/index.ts"
 import { MongoSlotsUpdate, MongoUser, UserStatus } from "../users/data/types.ts"
 import {
   convertDateToDayString,
-  denoServe,
   handleCORS,
+  secureConnectToSupabase,
 } from "../utils/index.ts"
 
 const isFixDisabled = true

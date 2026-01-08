@@ -2,7 +2,8 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-import { denoServe, handleCORS } from "../utils/index.ts"
+import { denoServe } from "../deno/deno.ts"
+import { handleCORS } from "../utils/index.ts"
 import { createUsers } from "./createUsers.ts"
 
 const isAddUsersDisabled = false

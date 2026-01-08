@@ -2,7 +2,7 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-import { denoServe } from "../utils/index.ts";
+import { denoServe } from "../deno/deno.ts"
 
 console.log("Hello from Functions!")
 

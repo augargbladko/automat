@@ -3,16 +3,16 @@
 // This enables autocomplete, go to definition, etc.
 
 import { AnyBulkWriteOperation, BulkWriteOptions, Filter } from "mongodb"
+import { denoServe } from "../deno/deno.ts"
 import { confirmUserEmail } from "../dig-add-users/createUser.ts"
 import { getDb } from "../mongodb/mongo.ts"
-import { secureConnectToSupabase } from "../queries/database/supaFunc.ts"
 import { storeUsers } from "../queries/database/users.ts"
 import { UserCol } from "../types/database.ts"
 import { Tables, UserData, UserUpsert } from "../types/index.ts"
 import { MongoSlotsUpdate, MongoUser, UserStatus } from "../users/data/types.ts"
 import { getNextActionTime } from "../users/getNextActionTime.ts"
 import { convertDateToDayString } from "../utils/consts.ts"
-import { denoServe, handleCORS } from "../utils/index.ts"
+import { handleCORS, secureConnectToSupabase } from "../utils/index.ts"
 import { delay } from "../utils/time.ts"
 import { getSlotsUpdate } from "./getSlotsUpdate.ts"
 import { sendGaForUser } from "./sendGa.ts"

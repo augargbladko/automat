@@ -39,9 +39,7 @@ export function TextHeaderSection({ children }: { children: any }) {
 }
 export function PageSection({ children }: { children: any }) {
   return (
-    <div className="w-full pt-[60px] flex flex-col overflow-y-auto">
-      {children}
-    </div>
+    <div className="w-full flex flex-col overflow-y-auto pb-20">{children}</div>
   )
 }
 export function tableClassNames(isFullScreen?: boolean) {

@@ -26,7 +26,7 @@ const pathTitles: { [key in MainPaths]: string } = {
 
 export function Header() {
   return (
-    <div className="h-[60px] w-full bg-purple-950 fixed flex flex-row justify-between items-center overflow-hidden z-10">
+    <div className="w-full bg-purple-950 flex flex-row justify-between items-center z-10">
       <div className="w-200px flex flex-row flex-1 mx-4">
         <HeaderLink path={MainPaths.Home} />
         <HeaderLink path={MainPaths.Analysis} />
