@@ -11,9 +11,9 @@ export async function middleware(req: NextRequest) {
   const supabase = createMiddlewareClient<Database>({ req, res })
 
   // Refresh session if expired - required for Server Components
-  const session = await supabase.auth.getSession()
+  const session = await supabase.auth.getClaims()
 
-  if (!session.data.session) {
+  if (!session.data?.claims?.sub) {
     return NextResponse.redirect(new URL("/login", req.url))
   }
 
