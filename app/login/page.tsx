@@ -10,6 +10,8 @@ export default function Login({
   const signIn = async (formData: FormData) => {
     "use server"
 
+    console.log("Login attempt")
+
     const email = formData.get("email") as string
     const password = formData.get("password") as string
     const supabase = await createClient()
