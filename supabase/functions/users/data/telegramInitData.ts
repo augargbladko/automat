@@ -1,5 +1,3 @@
-/// <reference lib="deno.ns" />
-
 import crypto from "node:crypto"
 import { UserData } from "../../types/index.ts"
 

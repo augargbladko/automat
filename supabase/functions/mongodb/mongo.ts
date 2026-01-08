@@ -1,5 +1,3 @@
-/// <reference lib="deno.ns" />
-
 import { Db, MongoClient } from "mongodb"
 import { updateUser } from "../users/user.ts"
 

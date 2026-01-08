@@ -101,6 +101,18 @@ export function getSlotsUpdate(
   const slotsUpdate: MongoSlotsUpdate = {
     tokenBalance: mongoUser.tokenBalance + nugs,
     pointsBalance: mongoUser.pointsBalance + ore,
+    loginBonusStreak: Math.max(
+      mongoUser.loginBonusStreak + 1,
+      1 +
+        Math.floor(
+          (Math.random() *
+            (Date.now() - (mongoUser.createdAt?.getTime() || Date.now()))) /
+            1000 /
+            60 /
+            60 /
+            24
+        )
+    ),
     lastLoginDay: todayString, // this will trigger the GA run only if it's "today"
     slotsLastPlayed: date.toISOString(), // we don't update this one if we aren't updating the date
     lastActivityAt: date,

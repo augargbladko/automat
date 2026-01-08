@@ -39,6 +39,7 @@ export interface MongoSlotsUpdate {
   slotsPlayState: SlotsPlayState
   lastLoginDay?: string
   slotsLastPlayed?: string
+  loginBonusStreak?: number
 }
 
 export interface MongoUser {

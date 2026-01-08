@@ -1,5 +1,3 @@
-/// <reference lib="deno.ns" />
-
 import { mnemonicToPrivateKey } from "@ton/crypto"
 import { WalletContractV4 } from "@ton/ton"
 

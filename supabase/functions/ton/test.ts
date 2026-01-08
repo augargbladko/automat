@@ -1,5 +1,3 @@
-/// <reference lib="deno.ns" />
-
 import { mnemonicNew } from "@ton/crypto"
 import { internal, TonClient, WalletContractV4 } from "@ton/ton"
 import { UserData } from "../types/index.ts"

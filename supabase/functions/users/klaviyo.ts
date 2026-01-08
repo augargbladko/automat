@@ -1,5 +1,3 @@
-/// <reference lib="deno.ns" />
-
 import { UserData } from "../types/index.ts"
 
 export async function subscribeProfileToList(user: UserData): Promise<boolean> {
