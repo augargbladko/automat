@@ -15,8 +15,9 @@ export const bitQueryApiToken = Deno.env.get("BITQUERY_API_TOKEN") || ""
 export const bitQueryV2ApiKey = Deno.env.get("BITQUERY_API_KEY") || ""
 export const coinMarketCapApiKey = Deno.env.get("COINMARKETCAP_API_KEY") || ""
 
-export const supabaseUrl = Deno.env.get("SUPABASE_URL") || ""
-export const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") || ""
+export const supabaseUrl = Deno.env.get("NEXT_PUBLIC_SUPABASE_URL") || ""
+export const supabaseAnonKey =
+  Deno.env.get("NEXT_PUBLIC_SUPABASE_ANON_KEY") || ""
 export const supabaseServiceRoleKey =
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || ""
 
