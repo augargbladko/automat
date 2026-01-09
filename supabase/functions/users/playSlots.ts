@@ -1,9 +1,9 @@
 import { UserData } from "../types/index.ts"
 import { ApiRoute, BASE_ROUTE } from "../utils/consts.ts"
 import { getUserAgent } from "../utils/fetch.ts"
+import { SlotsPlayState } from "../utils/index.ts"
 import { delay } from "../utils/time.ts"
 import { createTelegramInitData } from "./data/telegramInitData.ts"
-import { SlotsPlayState } from "./data/types.ts"
 
 export async function playSlotsUntilEnergyRunsOut(user: UserData) {
   let currentEnergy = 1000000

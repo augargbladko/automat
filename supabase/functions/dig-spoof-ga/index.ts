@@ -10,10 +10,14 @@ import { denoConnectToSupabase } from "../queries/database/supaFunc.ts"
 import { storeUsers } from "../queries/database/users.ts"
 import { UserCol } from "../types/database.ts"
 import { Tables, UserData, UserUpsert } from "../types/index.ts"
-import { MongoSlotsUpdate, MongoUser, UserStatus } from "../users/data/types.ts"
 import { getNextActionTime } from "../users/getNextActionTime.ts"
 import { convertDateToDayString } from "../utils/consts.ts"
-import { handleCORS } from "../utils/index.ts"
+import {
+  handleCORS,
+  MongoSlotsUpdate,
+  MongoUser,
+  UserStatus,
+} from "../utils/index.ts"
 import { delay } from "../utils/time.ts"
 import { getSlotsUpdate } from "./getSlotsUpdate.ts"
 import { sendGaForUser } from "./sendGa.ts"

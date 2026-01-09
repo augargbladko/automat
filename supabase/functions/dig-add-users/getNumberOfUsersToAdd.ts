@@ -83,13 +83,15 @@ export function getNumberOfUsersToAdd(): { realAdd: number; fakeAdd: number } {
     realAdd: Math.floor(
       modifyUserAdd(
         today.real +
-          (tomorrow.real - today.real) * adjustmentFactor * Math.random() * 2
+          (tomorrow.real - today.real) *
+            adjustmentFactor *
+            (0.6 + Math.random() * 0.8)
       )
     ),
     fakeAdd: Math.floor(
       modifyUserAdd(
-        today.fake +
-          (tomorrow.fake - today.fake) * adjustmentFactor * Math.random() * 2
+        today.fake + 0
+        //(tomorrow.fake - today.fake) * adjustmentFactor * (0.6 + Math.random() * 0.8)
       )
     ),
   }

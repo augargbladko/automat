@@ -1,5 +1,5 @@
 import { getAnalytics } from "@/calls/analytics"
-import { UserStatus } from "@/supabase/functions/users/data/types"
+import { UserStatus } from "@/supabase/functions/utils"
 import Link from "next/link"
 
 export default async function Index() {

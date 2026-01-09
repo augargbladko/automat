@@ -1,7 +1,7 @@
 import { UserData } from "../types/index.ts"
 import { LEVEL_DAY_DATA } from "../users/data/levelDayData.ts"
-import { MongoSlotsUpdate, MongoUser } from "../users/data/types.ts"
 import { convertDateToDayString } from "../utils/consts.ts"
+import { MongoSlotsUpdate, MongoUser } from "../utils/index.ts"
 
 const LEVEL_TO_PLAY_GAP: { [level: number]: number } = {
   0: 13 * 24 * 60 * 60 * 1000,

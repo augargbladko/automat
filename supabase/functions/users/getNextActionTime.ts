@@ -1,5 +1,5 @@
 import { UserData } from "../types/index.ts"
-import { UserStatus } from "./data/types.ts"
+import { UserStatus } from "../utils/index.ts"
 
 export function getNextActionTime(user: UserData): number {
   const nextActionTime =

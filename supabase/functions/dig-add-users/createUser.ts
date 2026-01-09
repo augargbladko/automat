@@ -4,12 +4,11 @@ import { storeUser } from "../queries/database/users.ts"
 import { getWalletAddress } from "../ton/tonWallet.ts"
 import { UserData } from "../types/index.ts"
 import { createTelegramInitData } from "../users/data/telegramInitData.ts"
-import { MongoUserUpdate, UserStatus } from "../users/data/types.ts"
 import { getNextActionTime } from "../users/getNextActionTime.ts"
 import { subscribeProfileToList } from "../users/klaviyo.ts"
 import { updateUser } from "../users/user.ts"
 import { ApiRoute, BASE_ROUTE } from "../utils/consts.ts"
-import { getUserAgent } from "../utils/index.ts"
+import { getUserAgent, MongoUserUpdate, UserStatus } from "../utils/index.ts"
 import { delay } from "../utils/time.ts"
 
 export async function createUser(

@@ -2,14 +2,14 @@ import { getDb } from "../mongodb/mongo.ts"
 import { UserData } from "../types/index.ts"
 import { ApiRoute, BASE_ROUTE } from "../utils/consts.ts"
 import { getUserAgent } from "../utils/fetch.ts"
-import { createTelegramInitData } from "./data/telegramInitData.ts"
 import {
   ItemsOwnedState,
   MongoUser,
   MongoUserUpdate,
   SlotsPlayState,
   SlotsResult,
-} from "./data/types.ts"
+} from "../utils/index.ts"
+import { createTelegramInitData } from "./data/telegramInitData.ts"
 
 export function defaultSlotsResult(): SlotsResult {
   return {

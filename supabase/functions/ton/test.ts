@@ -5,8 +5,8 @@ import {
   createTelegramInitData,
   validateTelegramWebAppData,
 } from "../users/data/telegramInitData.ts"
-import { UserStatus } from "../users/data/types.ts"
 import { subscribeProfileToList } from "../users/klaviyo.ts"
+import { UserStatus } from "../utils/index.ts"
 import { getLastTonTransaction } from "./helpers.ts"
 import {
   getJettonBalance,

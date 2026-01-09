@@ -1,39 +1,50 @@
 // Add the user's play, purchase, and Ore/NUGS
 
-import { UserData } from "../types/index.ts";
-import { convertDateToDayString, getUserDayString } from "../utils/consts.ts";
-import { getGoldenSpinResult } from "./data/goldenSpin.ts";
-import { LEVEL_PACKAGES } from "./data/packages.ts";
-import { defaultItemsState, MongoUserUpdate, PackageType } from "./data/types.ts";
-import { defaultSlotsPlayState, getMaxEnergy, getUser, updateUser } from "./user.ts";
-
+import { UserData } from "../types/index.ts"
+import { convertDateToDayString, getUserDayString } from "../utils/consts.ts"
+import {
+  defaultItemsState,
+  MongoUserUpdate,
+  PackageType,
+} from "../utils/index.ts"
+import { getGoldenSpinResult } from "./data/goldenSpin.ts"
+import { LEVEL_PACKAGES } from "./data/packages.ts"
+import {
+  defaultSlotsPlayState,
+  getMaxEnergy,
+  getUser,
+  updateUser,
+} from "./user.ts"
 
 export async function setUserData(user: UserData) {
-  const mongoUser = await getUser(user);
+  const mongoUser = await getUser(user)
   if (!mongoUser) {
-    console.error("Cannot set user data, user not found:", user.telegram_id);
-    return;
+    console.error("Cannot set user data, user not found:", user.telegram_id)
+    return
   } else if (mongoUser.level === user.user_level) {
-    console.error("Already updated user level, no action needed:", user.telegram_id);
-    return;
+    console.error(
+      "Already updated user level, no action needed:",
+      user.telegram_id
+    )
+    return
   }
   // we're going to do a direct database update for the user
   //   the database just won't update if we don't have this user.
-  const createdNow = new Date(mongoUser.createdAt);
-  createdNow.setDate(createdNow.getDate() - 15 - Math.floor(Math.random() * 30)); // set created date to up to 15-45 days before the previous one
-  const userNow = new Date();
-  userNow.setMinutes(userNow.getMinutes() - Math.random() * 1200); // set to up to 20 minutes ago
+  const createdNow = new Date(mongoUser.createdAt)
+  createdNow.setDate(createdNow.getDate() - 15 - Math.floor(Math.random() * 30)) // set created date to up to 15-45 days before the previous one
+  const userNow = new Date()
+  userNow.setMinutes(userNow.getMinutes() - Math.random() * 1200) // set to up to 20 minutes ago
   const update: MongoUserUpdate = {
     level: user.user_level || 0,
     createdAt: createdNow,
     createdDay: convertDateToDayString(createdNow),
     slotsLastPlayed: userNow.toISOString(), // set to 10 minutes ago to allow immediate play
     lastLoginDay: getUserDayString(userNow, user.time_zone),
-    loginBonusStreak: 30
-  };
+    loginBonusStreak: 30,
+  }
 
   // slotsplayedstate
-  const spinResult = getGoldenSpinResult();
+  const spinResult = getGoldenSpinResult()
   update.goldenSpinState = {
     packageType: PackageType.levels,
     packageId: user.user_level || 0,
@@ -41,8 +52,8 @@ export async function setUserData(user: UserData) {
     points: spinResult.points,
     tokens: spinResult.tokens,
     readyToCollect: false,
-  };
-  const treasure = user.treasure || 0;
+  }
+  const treasure = user.treasure || 0
   if (treasure > 0) {
     update.itemsOwnedState = {
       ...(mongoUser.itemsOwnedState || defaultItemsState()),
@@ -50,38 +61,58 @@ export async function setUserData(user: UserData) {
         1: treasure >= 1 && Math.random() > 0.2 ? 1 : 0, // add a little randomness, so not everyone has all treasures
         2: treasure >= 2 && Math.random() > 0.15 ? 1 : 0,
         3: treasure >= 3 && Math.random() > 0.1 ? 1 : 0,
-        4: treasure >= 4 && Math.random() > 0.05 ? 1 : 0
+        4: treasure >= 4 && Math.random() > 0.05 ? 1 : 0,
       },
     }
   }
-  const tonSpent = (LEVEL_PACKAGES.find(p => p.level === user.user_level)?.tonPrice || 0)
-    + update.itemsOwnedState!.treasure[1]
-    + update.itemsOwnedState!.treasure[2] * 2
-    + update.itemsOwnedState!.treasure[3] * 5
-    + update.itemsOwnedState!.treasure[4] * 10;
+  const tonSpent =
+    (LEVEL_PACKAGES.find((p) => p.level === user.user_level)?.tonPrice || 0) +
+    update.itemsOwnedState!.treasure[1] +
+    update.itemsOwnedState!.treasure[2] * 2 +
+    update.itemsOwnedState!.treasure[3] * 5 +
+    update.itemsOwnedState!.treasure[4] * 10
   if (tonSpent > 0) {
-    update.tonSpend = tonSpent;
+    update.tonSpend = tonSpent
   }
 
-  const pointsPerSpin = Math.floor(1900000 * (LEVEL_PACKAGES.find((p) => p.level === user?.user_level || 0)?.multiplier || 1) * (1 + Math.random() / 5) / 1000) * 1000
-  const tokensPerSpin = Math.floor((20000 + update.itemsOwnedState!.treasure[1] * 4500
-    + update.itemsOwnedState!.treasure[2] * 7500
-    + update.itemsOwnedState!.treasure[3] * 15500
-    + update.itemsOwnedState!.treasure[4] * 22500) * (1 + Math.random() / 5) / 50) * 50; // 0-20% variance
-  const totalSpins = Math.floor(getMaxEnergy(user.user_level) / 500 * 24 * 30 * 2 * (0.8 + Math.random() / 2)); // 3 months of spins
-  const pointsFromSpins = pointsPerSpin * totalSpins;
-  const tokensFromSpins = tokensPerSpin * totalSpins;
-  update.pointsBalance = (mongoUser.pointsBalance || 0) + pointsFromSpins;
-  update.tokenBalance = (mongoUser.tokenBalance || 0) + tokensFromSpins;
+  const pointsPerSpin =
+    Math.floor(
+      (1900000 *
+        (LEVEL_PACKAGES.find((p) => p.level === user?.user_level || 0)
+          ?.multiplier || 1) *
+        (1 + Math.random() / 5)) /
+        1000
+    ) * 1000
+  const tokensPerSpin =
+    Math.floor(
+      ((20000 +
+        update.itemsOwnedState!.treasure[1] * 4500 +
+        update.itemsOwnedState!.treasure[2] * 7500 +
+        update.itemsOwnedState!.treasure[3] * 15500 +
+        update.itemsOwnedState!.treasure[4] * 22500) *
+        (1 + Math.random() / 5)) /
+        50
+    ) * 50 // 0-20% variance
+  const totalSpins = Math.floor(
+    (getMaxEnergy(user.user_level) / 500) *
+      24 *
+      30 *
+      2 *
+      (0.8 + Math.random() / 2)
+  ) // 3 months of spins
+  const pointsFromSpins = pointsPerSpin * totalSpins
+  const tokensFromSpins = tokensPerSpin * totalSpins
+  update.pointsBalance = (mongoUser.pointsBalance || 0) + pointsFromSpins
+  update.tokenBalance = (mongoUser.tokenBalance || 0) + tokensFromSpins
 
   update.slotsPlayState = {
     ...(mongoUser.slotsPlayState || defaultSlotsPlayState()),
     totalPointsEarned: pointsFromSpins,
     totalTokensEarned: tokensFromSpins,
-    totalSpins: totalSpins
-  };
+    totalSpins: totalSpins,
+  }
   // update slotsplayedstate
-  await updateUser(update, user);
+  await updateUser(update, user)
 }
 
 /*export async function updateUserPlayData(user: UserData) {

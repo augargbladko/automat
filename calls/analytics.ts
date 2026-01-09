@@ -1,4 +1,4 @@
-import { secureConnectToSupabase } from "@/supabase/functions/utils/index"
+import { secureConnectToSupabase } from "@/supabase/functions/utils"
 
 interface AnalyticsResult {
   user_status: string

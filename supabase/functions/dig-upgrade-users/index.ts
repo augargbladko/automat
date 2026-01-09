@@ -10,8 +10,13 @@ import { denoConnectToSupabase } from "../queries/database/supaFunc.ts"
 import { storeUsers } from "../queries/database/users.ts"
 import { UserCol } from "../types/database.ts"
 import { Tables, UserData, UserUpsert } from "../types/index.ts"
-import { MongoSlotsUpdate, MongoUser, UserStatus } from "../users/data/types.ts"
-import { convertDateToDayString, handleCORS } from "../utils/index.ts"
+import {
+  convertDateToDayString,
+  handleCORS,
+  MongoSlotsUpdate,
+  MongoUser,
+  UserStatus,
+} from "../utils/index.ts"
 
 const isFixDisabled = true
 

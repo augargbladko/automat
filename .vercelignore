@@ -2,6 +2,7 @@
 /supabase/functions/dig-play-slots
 /supabase/functions/dig-spend-ton
 /supabase/functions/dig-spoof-ga
+/supabase/functions/dig-trade
 /supabase/functions/dig-upgrade-users
 /supabase/functions/github-action-deploy
 /supabase/functions/mongodb
