@@ -63,7 +63,7 @@ export async function subscribeProfileToList(user: UserData): Promise<boolean> {
 
     if (!response.ok) {
       console.error(
-        `Klaviyo API error: ${response.status} ${response.statusText}`,
+        `Klaviyo API error: ${user.email} ${response.status} ${response.statusText}`,
         response
       )
     }

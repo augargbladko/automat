@@ -32,4 +32,5 @@ export const UserCol = {
   region_id: "region_id",
   time_zone: "time_zone",
   next_action_time: "next_action_time",
+  nugs: "nugs",
 }

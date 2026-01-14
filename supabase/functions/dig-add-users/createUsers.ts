@@ -49,7 +49,7 @@ export async function createUsers(): Promise<void> {
         .select("*")
         .neq(UserCol.referral_group, 0)
         .eq(UserCol.user_status, UserStatus.live)
-        .order(UserCol.referral_pos, { ascending: true })
+        .order(UserCol.nugs, { ascending: false })
         .limit(realRemove)
       const toRemove = removeResult.data || []
       console.log(

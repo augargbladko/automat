@@ -246,7 +246,12 @@ export async function confirmUserEmail(user: UserData): Promise<boolean> {
     )
     if (!confirmEmailResponse.ok) {
       const confirmEmailData = await confirmEmailResponse.json()
-      console.error("Confirm email response not ok:", confirmEmailData)
+      console.error(
+        "Confirm email response not ok:",
+        user.email,
+        user.telegram_id,
+        confirmEmailData
+      )
     }
     return confirmEmailResponse.ok
   } catch (error) {
