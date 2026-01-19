@@ -9,6 +9,36 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      fix_email: {
+        Row: {
+          confirmed_email: boolean | null
+          email: string | null
+          new_email: string | null
+          new_first_name: string | null
+          new_telegram_id: number | null
+          status_text: string | null
+          telegram_id: number
+        }
+        Insert: {
+          confirmed_email?: boolean | null
+          email?: string | null
+          new_email?: string | null
+          new_first_name?: string | null
+          new_telegram_id?: number | null
+          status_text?: string | null
+          telegram_id: number
+        }
+        Update: {
+          confirmed_email?: boolean | null
+          email?: string | null
+          new_email?: string | null
+          new_first_name?: string | null
+          new_telegram_id?: number | null
+          status_text?: string | null
+          telegram_id?: number
+        }
+        Relationships: []
+      }
       user_data: {
         Row: {
           browser: string | null

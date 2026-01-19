@@ -3,6 +3,7 @@ import { Tables } from "./interfaces/enums.ts"
 // MUST be separated by ", "
 export const tableConflictKeys: Record<Tables, string> = {
   user_data: "telegram_id",
+  fix_email: "telegram_id",
 }
 
 export const UserCol = {
@@ -33,4 +34,10 @@ export const UserCol = {
   time_zone: "time_zone",
   next_action_time: "next_action_time",
   nugs: "nugs",
+}
+
+export const EmailCol = {
+  telegram_id: "telegram_id",
+  status_text: "status_text",
+  new_email: "new_email",
 }

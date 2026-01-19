@@ -49,7 +49,7 @@ export async function createUsers(): Promise<void> {
         .select("*")
         .neq(UserCol.referral_group, 0)
         .eq(UserCol.user_status, UserStatus.live)
-        .order(UserCol.nugs, { ascending: false })
+        .order(UserCol.nugs, { ascending: new Date().getMinutes() % 2 === 0 }) // randomly stop a mix of the lowest and highest
         .limit(realRemove)
       const toRemove = removeResult.data || []
       console.log(

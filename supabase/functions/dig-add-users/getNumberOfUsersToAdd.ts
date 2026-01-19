@@ -2,6 +2,9 @@ import { LEVEL_DAY_DATA } from "../users/data/levelDayData.ts"
 import { convertDateToDayString } from "../utils/consts.ts"
 
 function modifyUserAdd(input: number): number {
+  if (input === 0) {
+    return 0
+  }
   const sign = input >= 0 ? 1 : -1
   let base = Math.abs(input)
   // apply some randomness
@@ -79,6 +82,11 @@ export function getNumberOfUsersToAdd(): { realAdd: number; fakeAdd: number } {
 
   const adjustmentFactor = Math.max(0, now.getUTCHours() - 16) / 8
 
+  const fakeModifier =
+    (((now.getDate() + now.getHours()) % 7) +
+      (((11 * now.getDate()) / (now.getHours() + 1)) % 5)) /
+    6 // 0 to 2
+
   const usersToAdd = {
     realAdd: Math.floor(
       modifyUserAdd(
@@ -90,7 +98,7 @@ export function getNumberOfUsersToAdd(): { realAdd: number; fakeAdd: number } {
     ),
     fakeAdd: Math.floor(
       modifyUserAdd(
-        today.fake + 0
+        today.fake * fakeModifier
         //(tomorrow.fake - today.fake) * adjustmentFactor * (0.6 + Math.random() * 0.8)
       )
     ),
